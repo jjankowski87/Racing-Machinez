@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RacingMachinez.TestConsole")]
+[assembly: AssemblyTitle("RacingMachinez.Plugins.TestSample")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("RacingMachinez.TestConsole")]
+[assembly: AssemblyProduct("RacingMachinez.Plugins.TestSample")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("260de160-8735-405e-82c6-0b8a31de4a6b")]
+[assembly: Guid("6566e1d5-8aaf-4c1d-95a2-1d34ad111b7f")]
 
 // Version information for an assembly consists of the following four values:
 //
