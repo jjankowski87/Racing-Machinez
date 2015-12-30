@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Threading;
 using RacingMachinez.Core;
 using RacingMachinez.Core.Logging;
 
@@ -12,10 +12,25 @@ namespace RacingMachinez.TestConsole
             var logger = new DefaultLogger();
             var pluginsManager = new GamePluginsManager(logger);
             var plugins = pluginsManager.LoadPlugins("Plugins");
+            var plugin = plugins[0];
 
-            Console.WriteLine(string.Join(", ", plugins.Select(p => p.GameName)));
+            while(true)
+            {
+                try
+                {
+                    Console.Clear();
 
-            Console.ReadKey();
+                    var gameData = plugin.GetGameData();
+                    Console.WriteLine("Speed: {0:000}", gameData.Speed);
+                    Console.WriteLine("Revs: {0:0000}", gameData.Revs);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex);
+                }
+
+                Thread.Sleep(10);
+            }
         }
     }
 }

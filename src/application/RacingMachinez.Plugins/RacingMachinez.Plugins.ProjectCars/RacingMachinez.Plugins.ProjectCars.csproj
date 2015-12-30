@@ -41,8 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProjectCarsGameDataReader.cs" />
+    <Compile Include="Structures\CarState.cs" />
+    <Compile Include="Structures\Enums\CarFlags.cs" />
+    <Compile Include="Structures\Enums\GameState.cs" />
+    <Compile Include="Structures\GameStates.cs" />
+    <Compile Include="Structures\VehicleInformation.cs" />
     <Compile Include="ProjectCarsPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\Enums\RaceState.cs" />
+    <Compile Include="Structures\Enums\SessionState.cs" />
+    <Compile Include="Structures\ProjectCarsGameData.cs" />
+    <Compile Include="UnmanagedMemoryAccessorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\RacingMachinez.Contracts\RacingMachinez.Contracts.csproj">
