@@ -13,23 +13,20 @@ namespace RacingMachinez.TestConsole
             var pluginsManager = new GamePluginsManager(logger);
             var plugins = pluginsManager.LoadPlugins("Plugins");
             var plugin = plugins[0];
+            var arduino = new Writer();
 
             while(true)
             {
                 try
                 {
-                    Console.Clear();
-
-                    var gameData = plugin.GetGameData();
-                    Console.WriteLine("Speed: {0:000}", gameData.Speed);
-                    Console.WriteLine("Revs: {0:0000}", gameData.Revs);
+                    arduino.Send(plugin.GetGameData());
                 }
                 catch (Exception ex)
                 {
                     logger.LogError(ex);
                 }
 
-                Thread.Sleep(10);
+                Thread.Sleep(50);
             }
         }
     }

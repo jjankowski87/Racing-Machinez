@@ -31,7 +31,7 @@ namespace RacingMachinez.Plugins.ProjectCars
                         return new GameData
                         {
                             Revs = (ushort)gameData.CarState.Rpm,
-                            Speed = (ushort)gameData.CarState.Speed
+                            Speed = (ushort)(gameData.CarState.Speed * 3.6f)
                         };
                     }
                 }
