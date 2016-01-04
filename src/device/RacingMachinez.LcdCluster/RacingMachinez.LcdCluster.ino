@@ -1,11 +1,15 @@
 #include <LiquidCrystal.h>
+#include <AccelStepper.h>
+#define HALFSTEP 8
 
+AccelStepper speedStepper(HALFSTEP, 6, 8, 7, 9);
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 const int StringMaxLength = 64;
 String inputString = "";           // a string to hold incoming data
 boolean isStringComplete = false;  // whether the string is complete
 int inputLength = 0;
+float oneKmhSteps = 10.0f;
 
 void setup()
 {
@@ -13,28 +17,47 @@ void setup()
   inputString.reserve(StringMaxLength);
   
   lcd.begin(16, 2);
+  initializeSpeedStepper();
+}
+
+void initializeSpeedStepper()
+{
+  speedStepper.setCurrentPosition(0);
+  speedStepper.setMaxSpeed(1000);
+  speedStepper.setAcceleration(1000.0);
+  speedStepper.setSpeed(1000);
 }
 
 void loop()
 {
   if (isStringComplete) 
   {
-    displaySpeed(inputString);
+    int speed = displaySpeed(inputString);
     displayRevs(inputString);
 
     inputString = "";
     isStringComplete = false;
+
+    displaySpeedAnalog(speed);
   }
+  
+  speedStepper.run();
+}
+
+void displaySpeedAnalog(int speed)
+{
+    int stepsFromStart = oneKmhSteps * speed;    
+    speedStepper.moveTo(stepsFromStart);
 }
 
 // Displays speed on LCD from formatted string: "s=120;"
 // "speed:  xxx km/h"
-void displaySpeed(String message)
+int displaySpeed(String message)
 {
   String speed = parseInputMessage(message, "s");
   if (speed == "-1")
   {
-    return;
+    return 0;
   }
   
   int speedLength = speed.length(); 
@@ -58,6 +81,8 @@ void displaySpeed(String message)
   
   lcd.setCursor(12, 0);
   lcd.print("km/h"); 
+  
+  return speed.toInt();
 }
 
 // Displays revs on LCD from formatted string: "r=1200;"
