@@ -2,35 +2,21 @@
 #include <AccelStepper.h>
 #include <Arduino.h>
 
-#include "StepperMotor.h"
-#include "GameData.h"
-#include "SerialReader.h"
-#include "LcdCluster.h"
+#include "Controller.h"
 
-StepperMotor speedStepper(6, 7, 8, 9);
-LcdCluster lcdCluster(12, 11, 5, 4, 3, 2);
-SerialReader serialReader;
+Controller controller;
 
 void setup()
 {
-  lcdCluster.Initialize();
-  serialReader.Initialize();
+  controller.Setup();
 }
 
 void loop()
 {
-  if (serialReader.IsReadingComplete())
-  {
-    GameData gameData = serialReader.GetLastGameData();
-    
-    lcdCluster.DisplayGameData(gameData);
-    speedStepper.MoveTo(gameData.Speed);
-  }
-  
-  speedStepper.Run();
+  controller.Update();
 }
 
 void serialEvent()
 {
-  serialReader.Read();
+  controller.SerialEvent();
 }

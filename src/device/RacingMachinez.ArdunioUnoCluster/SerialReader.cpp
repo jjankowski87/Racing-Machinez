@@ -3,9 +3,11 @@
 SerialReader::SerialReader()
 { 
   _inputString.reserve(STRING_MAX_LENGTH);
-  _isReadingComplete = false;
   _inputString = "";
   _inputLength = 0; 
+  
+  _clusterData.State = Initialization;
+  ResetClusterData();
 }
 
 void SerialReader::Initialize()
@@ -20,8 +22,7 @@ void SerialReader::Read()
     char inputChar = (char)Serial.read();
     if (_inputLength >= STRING_MAX_LENGTH || inputChar == '\n')
     {    
-      ParseGameData();
-      _isReadingComplete = true;
+      ParseClusterData();
       _inputLength = 0;
       _inputString = "";
       return;
@@ -32,21 +33,21 @@ void SerialReader::Read()
   }
 }
 
-bool SerialReader::IsReadingComplete()
-{
-  return _isReadingComplete;
+ClusterData SerialReader::GetLastClusterData()
+{ 
+  return _clusterData;
 }
 
-GameData SerialReader::GetLastGameData()
+void SerialReader::SetState(ClusterState state)
 {
-  _isReadingComplete = false;   
-  return _gameData;
+  _clusterData.State = state;
 }
 
-void SerialReader::ParseGameData()
+void SerialReader::ParseClusterData()
 {
   ParseSpeed();
   ParseRevs();
+  ParseClusterMode();
 }
 
 void SerialReader::ParseSpeed()
@@ -54,17 +55,7 @@ void SerialReader::ParseSpeed()
   String speed = ParseInputMessage("s");
   if (speed != "")
   {
-    int intSpeed = speed.toInt();
-    if (intSpeed < 0)
-    {
-      intSpeed = 0;
-    }
-    else if (intSpeed > 999)
-    {
-      intSpeed = 999;
-    }
-    
-    _gameData.Speed = intSpeed;
+    _clusterData.Speed = speed.toInt();
   }
 }
 
@@ -73,18 +64,38 @@ void SerialReader::ParseRevs()
   String revs = ParseInputMessage("r");
   if (revs != "")
   {
-    int intRevs = revs.toInt();
-    if (intRevs < 0)
+    _clusterData.Revs = revs.toInt();
+  } 
+}
+
+void SerialReader::ParseClusterMode()
+{
+  String state = ParseInputMessage("m");
+  if (state != "")
+  {
+    ClusterState previousState = _clusterData.State;
+    
+    int mode = state.toInt();
+    if (mode >= 1 && mode <= 3)
     {
-      intRevs = 0;
+      _clusterData.State = static_cast<ClusterState>(mode);      
     }
-    else if (intRevs > 99999)
+    else
     {
-      intRevs = 99999;
+      _clusterData.State = Unknown;
     }
     
-    _gameData.Revs = intRevs;
-  } 
+    if (previousState != _clusterData.State)
+    {
+      ResetClusterData();
+    }
+  }
+}
+
+void SerialReader::ResetClusterData()
+{
+  _clusterData.Speed = 0;
+  _clusterData.Revs = 0;
 }
 
 String SerialReader::ParseInputMessage(String property)

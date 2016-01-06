@@ -2,7 +2,7 @@
 #define LcdCluster_h
 
 #include <LiquidCrystal.h>
-#include "GameData.h"
+#include "ClusterData.h"
 
 class LcdCluster
 {
@@ -11,15 +11,17 @@ public:
   ~LcdCluster();
   
   void Initialize();
-  void DisplayGameData(GameData gameData);
+  void DisplayClusterData(ClusterData clusterData);
+  void DisplayText(String text);
   
 private:
   LiquidCrystal* _lcd;
-  GameData _previouslyDisplayed;
+  ClusterData _previouslyDisplayed;
   
   void DisplaySpeed(int speed);
   void DisplayRevs(int revs);
-  int GetLength(int value);
+  static int GetLength(int value);
+  static int NormalizeValue(int value, int minValue, int maxValue);
 };
 
 #endif

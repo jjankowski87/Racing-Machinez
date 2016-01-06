@@ -1,7 +1,7 @@
 #ifndef SerialReader_h
 #define SerialReader_h
 
-#include "GameData.h"
+#include "ClusterData.h"
 #include <Arduino.h>
 
 class SerialReader
@@ -11,19 +11,20 @@ public:
   
   void Initialize();
   void Read();
-  bool IsReadingComplete();
-  GameData GetLastGameData();
+  ClusterData GetLastClusterData();
+  void SetState(ClusterState state);
+  void ResetClusterData();
   
 private:
   const int STRING_MAX_LENGTH = 64;
-  bool _isReadingComplete;
   String _inputString;
   int _inputLength;
-  GameData _gameData;
+  ClusterData _clusterData;
  
-  void ParseGameData();
+  void ParseClusterData();
   void ParseSpeed();
   void ParseRevs();
+  void ParseClusterMode();
   String ParseInputMessage(String property);
 };
 

@@ -3,6 +3,7 @@
 LcdCluster::LcdCluster(int rsPin, int enablePin, int data4Pin, int data5Pin, int data6Pin, int data7Pin)
 {
   _lcd = new LiquidCrystal(rsPin, enablePin, data4Pin, data5Pin, data6Pin, data7Pin);
+  _lcd->begin(16, 2);
 }
 
 LcdCluster::~LcdCluster()
@@ -11,9 +12,7 @@ LcdCluster::~LcdCluster()
 }
   
 void LcdCluster::Initialize()
-{
-  _lcd->begin(16, 2);
-  
+{  
   _lcd->setCursor(0, 0);
   _lcd->print("speed:    0 km/h");
 
@@ -21,19 +20,26 @@ void LcdCluster::Initialize()
   _lcd->print("revs:     0  rpm");
 }
 
-void LcdCluster::DisplayGameData(GameData gameData)
+void LcdCluster::DisplayClusterData(ClusterData clusterData)
 {
-  if (gameData.Speed != _previouslyDisplayed.Speed)
+  if (clusterData.Speed != _previouslyDisplayed.Speed)
   {
-    DisplaySpeed(gameData.Speed);
+    DisplaySpeed(NormalizeValue(clusterData.Speed, 0, 999));
   }
   
-  if (gameData.Revs != _previouslyDisplayed.Revs)
+  if (clusterData.Revs != _previouslyDisplayed.Revs)
   {
-    DisplayRevs(gameData.Revs);
+    DisplayRevs(NormalizeValue(clusterData.Revs, 0, 30000));
   }
   
-  _previouslyDisplayed = gameData;
+  _previouslyDisplayed = clusterData;
+}
+
+void LcdCluster::DisplayText(String text)
+{
+  _lcd->clear();
+  _lcd->setCursor(0, 0);
+  _lcd->print(text);
 }
 
 void LcdCluster::DisplaySpeed(int speed)
@@ -79,4 +85,18 @@ int LcdCluster::GetLength(int value)
   }
   
   return 1;
+}
+
+int LcdCluster::NormalizeValue(int value, int minValue, int maxValue)
+{
+  if (value < minValue)
+  {
+    return minValue;
+  }
+  if (value > maxValue)
+  {
+    return maxValue;
+  }
+  
+  return value;
 }
