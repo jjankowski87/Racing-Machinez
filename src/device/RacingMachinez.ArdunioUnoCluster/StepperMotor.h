@@ -18,7 +18,7 @@ public:
   void Move(int angle);
   boolean IsRunning();
 private:
-  const float ANGLE_TO_STEPS = 6.0f;
+  const float ANGLE_TO_STEPS = 3.36f;
   AccelStepper* _stepper;
   ConvertToAngleFunction _convertToAngleFunction;
 };

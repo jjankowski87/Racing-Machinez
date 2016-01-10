@@ -2,7 +2,7 @@
 
 StepperMotor::StepperMotor(int motorIn1, int motorIn2, int motorIn3, int motorIn4)
 {
-  _stepper = new AccelStepper(AccelStepper::FULL4WIRE, motorIn1, motorIn3, motorIn2, motorIn4);
+  _stepper = new AccelStepper(AccelStepper::HALF4WIRE, motorIn1, motorIn2, motorIn3, motorIn4);
   Reset();
 }
 
@@ -14,9 +14,9 @@ StepperMotor::~StepperMotor()
 void StepperMotor::Reset()
 {
   _stepper->setCurrentPosition(0);
-  _stepper->setMaxSpeed(1000);
-  _stepper->setAcceleration(1000.0);
-  _stepper->setSpeed(1000);
+  _stepper->setMaxSpeed(2500);
+  _stepper->setAcceleration(2500.0f);
+  _stepper->setSpeed(2500);
 }
 
 void StepperMotor::Run()

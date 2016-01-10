@@ -16,7 +16,7 @@ public:
   void SerialEvent();
 private:
   int _initializationPhase;
-  StepperMotor* _speedStepper;
+  StepperMotor* _revsStepper;
   LcdCluster* _lcdCluster;
   SerialReader* _serialReader;
   ClusterState _previousState;

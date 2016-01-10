@@ -2,7 +2,7 @@
 
 int Converters::ConvertSpeedToAngle(int speed)
 {
-  speed = NormalizeSpeed(speed);
+  speed = Normalize(speed, MIN_SPEED, MAX_SPEED);
   
   if (speed < LOW_SPEED_THRESHOLD)
   {
@@ -13,17 +13,24 @@ int Converters::ConvertSpeedToAngle(int speed)
   return LOW_SPEED_ANGLE + highSpeedAngle;
 }
 
-int Converters::NormalizeSpeed(int speed)
+int Converters::ConvertRevsToAngle(int revs)
 {
-  if (speed < MIN_SPEED)
+  revs = Normalize(revs, MIN_REVS, MAX_REVS);
+  
+  return REVS_FACTOR * revs;
+}
+
+int Converters::Normalize(int value, int minValue, int maxValue)
+{
+  if (value < minValue)
   {
-    return MIN_SPEED;
+    return minValue;
   }
   
-  if (speed > MAX_SPEED)
+  if (value > maxValue)
   {
-    return MAX_SPEED;
+    return maxValue;
   }
   
-  return speed;
+  return value;
 }

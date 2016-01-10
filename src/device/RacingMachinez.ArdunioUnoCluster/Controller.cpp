@@ -4,7 +4,7 @@
 
 Controller::Controller()
 {
-  _speedStepper = new StepperMotor(6, 7, 8, 9);
+  _revsStepper = new StepperMotor(8, 9, 6, 7);
   _lcdCluster = new LcdCluster(12, 11, 5, 4, 3, 2);
   _serialReader = new SerialReader();
   _initializationPhase = 0;
@@ -12,7 +12,7 @@ Controller::Controller()
 
 Controller::~Controller()
 {
-  delete _speedStepper;
+  delete _revsStepper;
   delete _lcdCluster;
   delete _serialReader;
 }
@@ -20,7 +20,7 @@ Controller::~Controller()
 void Controller::Setup()
 {
   _serialReader->Initialize();
-  _speedStepper->SetConvertFunction(&Converters::ConvertSpeedToAngle);
+  _revsStepper->SetConvertFunction(&Converters::ConvertRevsToAngle);
 }
 
 void Controller::Update()
@@ -29,7 +29,7 @@ void Controller::Update()
   
   if (_previousState == Calibration && clusterData.State != Calibration)
   {
-    _speedStepper->Reset();
+    _revsStepper->Reset();
   }
   
   switch (clusterData.State)
@@ -50,7 +50,7 @@ void Controller::Update()
   }
   
   _previousState = clusterData.State;
-  _speedStepper->Run();
+  _revsStepper->Run();
 }
 
 void Controller::SerialEvent()
@@ -67,20 +67,20 @@ void Controller::UpdateInitialization()
   
   if (_initializationPhase == 0)
   {
-    _speedStepper->MoveTo(260);
+    _revsStepper->MoveTo(8000);
     _initializationPhase += 1;
   }
   else if (_initializationPhase == 1)
   {
-    if (!_speedStepper->IsRunning())
+    if (!_revsStepper->IsRunning())
     {
-      _speedStepper->MoveTo(0);
+      _revsStepper->MoveTo(0);
       _initializationPhase += 1;
     }
   }
   else if (_initializationPhase == 2)
   {
-    if (!_speedStepper->IsRunning())
+    if (!_revsStepper->IsRunning())
     {
       _serialReader->SetState(Working);
       _initializationPhase = 0;
@@ -97,7 +97,7 @@ void Controller::UpdateCalibration(ClusterData clusterData)
   
   if (clusterData.Speed != 0)
   {
-    _speedStepper->Move(clusterData.Speed); 
+    _revsStepper->Move(clusterData.Speed); 
   }
 }
 
@@ -109,5 +109,5 @@ void Controller::UpdateWorking(ClusterData clusterData)
   }
   
   _lcdCluster->DisplayClusterData(clusterData);
-  _speedStepper->MoveTo(clusterData.Speed);
+  _revsStepper->MoveTo(clusterData.Revs);
 }

@@ -5,6 +5,7 @@ class Converters
 {
 public:
   static int ConvertSpeedToAngle(int speed);
+  static int ConvertRevsToAngle(int revs);
 private:
   static const int MIN_SPEED = 0;
   static const int MAX_SPEED = 260;
@@ -13,7 +14,11 @@ private:
   static const float HIGH_SPEED_FACTOR = 0.81f;
   static const int LOW_SPEED_ANGLE = 108;  // 80 * 1.35
   
-  static int NormalizeSpeed(int speed);
+  static const int MIN_REVS = 0;
+  static const int MAX_REVS = 9000;
+  static const float REVS_FACTOR = 0.031579f;
+  
+  static int Normalize(int value, int minValue, int maxValue);
 };
 
 #endif
