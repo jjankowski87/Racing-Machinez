@@ -14,9 +14,9 @@ StepperMotor::~StepperMotor()
 void StepperMotor::Reset()
 {
   _stepper->setCurrentPosition(0);
-  _stepper->setMaxSpeed(2500);
-  _stepper->setAcceleration(2500.0f);
-  _stepper->setSpeed(2500);
+  _stepper->setMaxSpeed(700);
+  _stepper->setAcceleration(3000.0f);
+  _stepper->setSpeed(700);
 }
 
 void StepperMotor::Run()
@@ -31,7 +31,7 @@ void StepperMotor::MoveTo(int angle)
     angle = _convertToAngleFunction(angle);
   }
   
-  _stepper->moveTo(angle * ANGLE_TO_STEPS);
+  _stepper->moveTo(angle * ANGLE_TO_STEPS); 
 }
 
 void StepperMotor::Move(int angle)
