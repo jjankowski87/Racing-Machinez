@@ -5,9 +5,6 @@ SerialReader::SerialReader()
   _inputString.reserve(STRING_MAX_LENGTH);
   _inputString = "";
   _inputLength = 0; 
-  
-  _clusterData.State = Initialization;
-  ResetClusterData();
 }
 
 void SerialReader::Initialize()
@@ -15,14 +12,14 @@ void SerialReader::Initialize()
   Serial.begin(9600);
 }
 
-void SerialReader::Read()
+void SerialReader::Read(ClusterData* clusterData)
 {
   while (Serial.available())
   {
     char inputChar = (char)Serial.read();
     if (_inputLength >= STRING_MAX_LENGTH || inputChar == '\n')
     {    
-      ParseClusterData();
+      ParseClusterData(clusterData);
       _inputLength = 0;
       _inputString = "";
       return;
@@ -33,69 +30,46 @@ void SerialReader::Read()
   }
 }
 
-ClusterData SerialReader::GetLastClusterData()
-{ 
-  return _clusterData;
-}
-
-void SerialReader::SetState(ClusterState state)
+void SerialReader::ParseClusterData(ClusterData* clusterData)
 {
-  _clusterData.State = state;
+  ParseSpeed(clusterData);
+  ParseRevs(clusterData);
+  ParseClusterMode(clusterData);
 }
 
-void SerialReader::ParseClusterData()
-{
-  ParseSpeed();
-  ParseRevs();
-  ParseClusterMode();
-}
-
-void SerialReader::ParseSpeed()
+void SerialReader::ParseSpeed(ClusterData* clusterData)
 {
   String speed = ParseInputMessage("s");
   if (speed != "")
   {
-    _clusterData.Speed = speed.toInt();
+    clusterData->Speed = speed.toInt();
   }
 }
 
-void SerialReader::ParseRevs()
+void SerialReader::ParseRevs(ClusterData* clusterData)
 {
   String revs = ParseInputMessage("r");
   if (revs != "")
   {
-    _clusterData.Revs = revs.toInt();
+    clusterData->Revs = revs.toInt();
   } 
 }
 
-void SerialReader::ParseClusterMode()
+void SerialReader::ParseClusterMode(ClusterData* clusterData)
 {
   String state = ParseInputMessage("m");
   if (state != "")
   {
-    ClusterState previousState = _clusterData.State;
-    
     int mode = state.toInt();
     if (mode >= 1 && mode <= 3)
     {
-      _clusterData.State = static_cast<ClusterState>(mode);      
+      clusterData->State = static_cast<ClusterState>(mode);      
     }
     else
     {
-      _clusterData.State = Unknown;
-    }
-    
-    if (previousState != _clusterData.State)
-    {
-      ResetClusterData();
+      clusterData->State = Unknown;
     }
   }
-}
-
-void SerialReader::ResetClusterData()
-{
-  _clusterData.Speed = 0;
-  _clusterData.Revs = 0;
 }
 
 String SerialReader::ParseInputMessage(String property)

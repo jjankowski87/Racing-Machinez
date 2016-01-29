@@ -2,112 +2,65 @@
 #include "Converters.h"
 #include "ClusterData.h"
 
+// TODO: bit configuration for enabling particular cluster items: REVS | SPEED | LCD
 Controller::Controller()
 {
-  _revsStepper = new StepperMotor(8, 9, 6, 7);
-  _lcdCluster = new LcdCluster(12, 11, 5, 4, 3, 2);
   _serialReader = new SerialReader();
-  _initializationPhase = 0;
+  
+  _clusterItems = new IClusterItem*[NUMBER_OF_CLUSTER_ITEMS];
+  _clusterItems[0] = new StepperMotor(2, 3, 4, 5, &Converters::ConvertRevsToAngle, SPEED_AND_REVS_SCALE_ANGLE);
+  _clusterItems[1] = new StepperMotor(14, 15, 16, 17, &Converters::ConvertSpeedToAngle, SPEED_AND_REVS_SCALE_ANGLE);
+  
+  _clusterData.State = Initialization;
 }
 
 Controller::~Controller()
 {
-  delete _revsStepper;
-  delete _lcdCluster;
+  for (int i = 0; i < NUMBER_OF_CLUSTER_ITEMS; i++)
+  {
+    delete _clusterItems[i];
+  }
+  
+  delete [] _clusterItems;
   delete _serialReader;
 }
 
 void Controller::Setup()
 {
   _serialReader->Initialize();
-  _revsStepper->SetConvertFunction(&Converters::ConvertRevsToAngle);
 }
 
 void Controller::Update()
 {
-  ClusterData clusterData = _serialReader->GetLastClusterData();
-  
-  if (_previousState == Calibration && clusterData.State != Calibration)
+  if (_clusterData.State == Initialization)
   {
-    _revsStepper->Reset();
+    PerformClusterInitialization();
   }
   
-  switch (clusterData.State)
+  for (int i = 0; i < NUMBER_OF_CLUSTER_ITEMS; i++)
   {
-    case Initialization:
-      UpdateInitialization();
-      break;
-    case Calibration:   
-      UpdateCalibration(clusterData);
-      _serialReader->ResetClusterData();
-      break;
-    case Working:
-      UpdateWorking(clusterData);
-      break;
-    default:  
-      _lcdCluster->DisplayText("Other");
-      return;
-  }
-  
-  _previousState = clusterData.State;
-  _revsStepper->Run();
+    _clusterItems[i]->UpdateData(_clusterData);
+  } 
 }
 
 void Controller::SerialEvent()
 {
-  _serialReader->Read();
-}
-
-void Controller::UpdateInitialization()
-{
-  if (_previousState != Initialization)
+  if (_clusterData.State != Initialization)
   {
-    _lcdCluster->DisplayText("Hello");
-  }
-  
-  if (_initializationPhase == 0)
-  {
-    _revsStepper->MoveTo(8000);
-    _initializationPhase += 1;
-  }
-  else if (_initializationPhase == 1)
-  {
-    if (!_revsStepper->IsRunning())
-    {
-      _revsStepper->MoveTo(0);
-      _initializationPhase += 1;
-    }
-  }
-  else if (_initializationPhase == 2)
-  {
-    if (!_revsStepper->IsRunning())
-    {
-      _serialReader->SetState(Working);
-      _initializationPhase = 0;
-    }
+    _serialReader->Read(&_clusterData);
   }
 }
 
-void Controller::UpdateCalibration(ClusterData clusterData)
+void Controller::PerformClusterInitialization()
 {
-  if (_previousState != Calibration)
+  boolean isHelloFinished = true;
+  for (int i = 0; i < NUMBER_OF_CLUSTER_ITEMS; i++)
   {
-    _lcdCluster->DisplayText("Calibration");
+    isHelloFinished = _clusterItems[i]->Hello() && isHelloFinished;
   }
   
-  if (clusterData.Speed != 0)
-  {
-    _revsStepper->Move(clusterData.Speed); 
-  }
-}
-
-void Controller::UpdateWorking(ClusterData clusterData)
-{
-  if (_previousState != Working)
-  {
-    _lcdCluster->Initialize();
-  }
-  
-  _lcdCluster->DisplayClusterData(clusterData);
-  _revsStepper->MoveTo(clusterData.Revs);
+  if (isHelloFinished)
+  {  
+    _clusterData.State = Working;
+  } 
 }

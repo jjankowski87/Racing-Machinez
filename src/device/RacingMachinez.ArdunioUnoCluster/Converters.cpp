@@ -1,23 +1,23 @@
 #include "Converters.h"
 
-int Converters::ConvertSpeedToAngle(int speed)
+int Converters::ConvertSpeedToAngle(ClusterData clusterData, bool enabled)
 {
-  speed = Normalize(speed, MIN_SPEED, MAX_SPEED);
-  
-  if (speed < LOW_SPEED_THRESHOLD)
+  if (!enabled)
   {
-    return LOW_SPEED_FACTOR * speed;
+    return clusterData.Speed;
   }
   
-  int highSpeedAngle = HIGH_SPEED_FACTOR * (speed - LOW_SPEED_THRESHOLD);
-  return LOW_SPEED_ANGLE + highSpeedAngle;
+  return SPEED_FACTOR * Normalize(clusterData.Speed, MIN_SPEED, MAX_SPEED);;
 }
 
-int Converters::ConvertRevsToAngle(int revs)
+int Converters::ConvertRevsToAngle(ClusterData clusterData, bool enabled)
 {
-  revs = Normalize(revs, MIN_REVS, MAX_REVS);
-  
-  return REVS_FACTOR * revs;
+  if (!enabled)
+  {
+    return clusterData.Revs;
+  }
+
+  return REVS_FACTOR * Normalize(clusterData.Revs, MIN_REVS, MAX_REVS);
 }
 
 int Converters::Normalize(int value, int minValue, int maxValue)

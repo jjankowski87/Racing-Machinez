@@ -3,7 +3,7 @@
 
 #include "StepperMotor.h"
 #include "SerialReader.h"
-#include "LcdCluster.h"
+#include "IClusterItem.h"
 
 class Controller
 {
@@ -15,15 +15,15 @@ public:
   void Setup();
   void SerialEvent();
 private:
-  int _initializationPhase;
-  StepperMotor* _revsStepper;
-  LcdCluster* _lcdCluster;
-  SerialReader* _serialReader;
-  ClusterState _previousState;
+  static const int NUMBER_OF_CLUSTER_ITEMS = 2;
+  static const int SPEED_AND_REVS_SCALE_ANGLE = 252;
   
-  void UpdateInitialization();
-  void UpdateCalibration(ClusterData clusterData);
-  void UpdateWorking(ClusterData clusterData);
+  IClusterItem** _clusterItems;
+  SerialReader* _serialReader;
+  ClusterData _clusterData;
+  
+  void UpdateClusterItems(ClusterData clusterData);
+  void PerformClusterInitialization();
 };
 
 #endif
