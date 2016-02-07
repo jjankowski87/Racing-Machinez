@@ -35,6 +35,7 @@ void SerialReader::ParseClusterData(ClusterData* clusterData)
   ParseSpeed(clusterData);
   ParseRevs(clusterData);
   ParseClusterMode(clusterData);
+  ParseGear(clusterData);
 }
 
 void SerialReader::ParseSpeed(ClusterData* clusterData)
@@ -69,6 +70,15 @@ void SerialReader::ParseClusterMode(ClusterData* clusterData)
     {
       clusterData->State = Unknown;
     }
+  }
+}
+
+void SerialReader::ParseGear(ClusterData* clusterData)
+{
+  String gear = ParseInputMessage("g");
+  if (gear.length() > 0)
+  {
+    clusterData->Gear = gear.charAt(0);  
   }
 }
 

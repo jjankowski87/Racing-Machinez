@@ -31,7 +31,8 @@ namespace RacingMachinez.Plugins.ProjectCars
                         return new GameData
                         {
                             Revs = (ushort)gameData.CarState.Rpm,
-                            Speed = (ushort)(gameData.CarState.Speed * 3.6f)
+                            Speed = (ushort)(gameData.CarState.Speed * 3.6f),
+                            Gear = ConvertGear(gameData.CarState.Gear)
                         };
                     }
                 }
@@ -42,6 +43,21 @@ namespace RacingMachinez.Plugins.ProjectCars
             }
 
             return new GameData();
+        }
+
+        private static char ConvertGear(int gear)
+        {
+            if (gear >= 1 && gear <= 9)
+            {
+                return Convert.ToChar(48 + gear);
+            }
+
+            if (gear < 0)
+            {
+                return 'R';
+            }
+
+            return 'N';
         }
     }
 }

@@ -24,7 +24,8 @@ namespace RacingMachinez.TestConsole
             try
             {
                 _arduinoPort.Open();
-                _arduinoPort.WriteLine(string.Format("s={0};r={1};", gameData.Speed, gameData.Revs));
+                // TODO: send gear only when it was changed
+                _arduinoPort.WriteLine(string.Format("s={0};r={1};g={2};", gameData.Speed, gameData.Revs, gameData.Gear));
             }
             finally
             {

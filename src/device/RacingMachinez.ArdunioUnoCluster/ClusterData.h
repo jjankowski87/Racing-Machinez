@@ -8,6 +8,7 @@ struct ClusterData
   int Speed;
   int Revs;
   ClusterState State;
+  char Gear;
 };
 
 #endif

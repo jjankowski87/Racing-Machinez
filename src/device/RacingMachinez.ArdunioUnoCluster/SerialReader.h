@@ -21,6 +21,7 @@ private:
   void ParseSpeed(ClusterData* clusterData);
   void ParseRevs(ClusterData* clusterData);
   void ParseClusterMode(ClusterData* clusterData);
+  void ParseGear(ClusterData* clusterData);
   String ParseInputMessage(String property);
 };
 

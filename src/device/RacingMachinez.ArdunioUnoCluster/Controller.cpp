@@ -1,22 +1,20 @@
 #include "Controller.h"
 #include "Converters.h"
 #include "ClusterData.h"
+#include "StepperMotor.h"
+#include "TftCluster.h"
 
-// TODO: bit configuration for enabling particular cluster items: REVS | SPEED | LCD
-Controller::Controller()
+Controller::Controller(ClusterItems clusterItems)
 {
   _serialReader = new SerialReader();
-  
-  _clusterItems = new IClusterItem*[NUMBER_OF_CLUSTER_ITEMS];
-  _clusterItems[0] = new StepperMotor(2, 3, 4, 5, &Converters::ConvertRevsToAngle, SPEED_AND_REVS_SCALE_ANGLE);
-  _clusterItems[1] = new StepperMotor(14, 15, 16, 17, &Converters::ConvertSpeedToAngle, SPEED_AND_REVS_SCALE_ANGLE);
-  
   _clusterData.State = Initialization;
+  
+  InitializeClusterItems(clusterItems);
 }
 
 Controller::~Controller()
 {
-  for (int i = 0; i < NUMBER_OF_CLUSTER_ITEMS; i++)
+  for (int i = 0; i < _numberOfClusterItems; i++)
   {
     delete _clusterItems[i];
   }
@@ -37,7 +35,7 @@ void Controller::Update()
     PerformClusterInitialization();
   }
   
-  for (int i = 0; i < NUMBER_OF_CLUSTER_ITEMS; i++)
+  for (int i = 0; i < _numberOfClusterItems; i++)
   {
     _clusterItems[i]->UpdateData(_clusterData);
   } 
@@ -51,16 +49,50 @@ void Controller::SerialEvent()
   }
 }
 
-void Controller::PerformClusterInitialization()
+void Controller::InitializeClusterItems(ClusterItems clusterItems)
 {
-  boolean isHelloFinished = true;
-  for (int i = 0; i < NUMBER_OF_CLUSTER_ITEMS; i++)
+  _numberOfClusterItems = 0;
+  for (int i = 0; i < 3; i++)
   {
-    isHelloFinished = _clusterItems[i]->Hello() && isHelloFinished;
+    if (((clusterItems >> i) % 2) == 1)
+    {
+      _numberOfClusterItems++;
+    }
   }
   
-  if (isHelloFinished)
-  {  
+  _clusterItems = new IClusterItem*[_numberOfClusterItems];  
+  int itemIndex = 0;
+  if (clusterItems & Tachometer)
+  {    
+    _clusterItems[itemIndex++] = new StepperMotor(2, 3, 4, 5, &Converters::ConvertRevsToAngle, SPEED_AND_REVS_SCALE_ANGLE);
+  }
+  
+  if (clusterItems & Speedometer)
+  {
+    _clusterItems[itemIndex++] = new StepperMotor(14, 15, 16, 17, &Converters::ConvertSpeedToAngle, SPEED_AND_REVS_SCALE_ANGLE); 
+  }
+  
+  if (clusterItems & Tft)
+  {
+    _clusterItems[itemIndex++] = new TftCluster(10, 9, 8);
+  }
+}
+
+void Controller::PerformClusterInitialization()
+{
+  boolean isInitializationFinished = true;
+  for (int i = 0; i < _numberOfClusterItems; i++)
+  {
+    isInitializationFinished = _clusterItems[i]->PerformInitialization() && isInitializationFinished;
+  }
+  
+  if (isInitializationFinished)
+  {
+    for (int i = 0; i < _numberOfClusterItems; i++)
+    {
+      _clusterItems[i]->FinishInitialization();
+    }  
+    
     _clusterData.State = Working;
   } 
 }

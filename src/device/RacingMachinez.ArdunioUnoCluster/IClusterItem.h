@@ -8,7 +8,8 @@ class IClusterItem
 {
     public:
         virtual ~IClusterItem() {};
-        virtual boolean Hello() = 0;
+        virtual boolean PerformInitialization() = 0;
+        virtual void FinishInitialization() = 0;        
         virtual void UpdateData(ClusterData clusterData) = 0;
 };
 

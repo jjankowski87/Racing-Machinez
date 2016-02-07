@@ -1,11 +1,11 @@
 #include "StepperMotor.h"
 
-StepperMotor::StepperMotor(int motorIn1, int motorIn2, int motorIn3, int motorIn4, ConvertToAngleFunction convertToAngleFunction, int helloValue)
+StepperMotor::StepperMotor(int motorIn1, int motorIn2, int motorIn3, int motorIn4, ConvertToAngleFunction convertToAngleFunction, int initializationValue)
 {
   _stepper = new AccelStepper(AccelStepper::HALF4WIRE, motorIn1, motorIn2, motorIn3, motorIn4);
   _convertToAngleFunction = convertToAngleFunction;
-  _helloValue = helloValue;
-  _helloPhase = 0;
+  _initializationValue = initializationValue;
+  _initializationPhase = 0;
 
   _stepper->setCurrentPosition(0);
   _stepper->setMaxSpeed(700);
@@ -18,19 +18,19 @@ StepperMotor::~StepperMotor()
   delete _stepper; 
 }
 
-boolean StepperMotor::Hello()
+boolean StepperMotor::PerformInitialization()
 {
-  if (_helloPhase == 0)
+  if (_initializationPhase == 0)
   {
-    _stepper->moveTo(_helloValue * ANGLE_TO_STEPS);
-    _helloPhase++;
+    _stepper->moveTo(_initializationValue * ANGLE_TO_STEPS);
+    _initializationPhase++;
   }
-  else if (_helloPhase == 1 && !_stepper->isRunning())
+  else if (_initializationPhase == 1 && !_stepper->isRunning())
   {
     _stepper->moveTo(0);
-    _helloPhase++;
+    _initializationPhase++;
   }
-  else if (_helloPhase == 2 && !_stepper->isRunning())
+  else if (_initializationPhase == 2 && !_stepper->isRunning())
   {
     return true;
   }
@@ -38,15 +38,16 @@ boolean StepperMotor::Hello()
   return false;
 }
 
+void StepperMotor::FinishInitialization()
+{    
+  _initializationPhase = 0;
+}
+
 void StepperMotor::UpdateData(ClusterData clusterData)
 {
   if (HasStateChangedFrom(clusterData.State, Calibration))
   {
     _stepper->setCurrentPosition(0);
-  }
-  else if (HasStateChangedFrom(clusterData.State, Initialization))
-  {
-    _helloPhase = 0;
   }
   
   int angle = CalculateAngle(clusterData);
