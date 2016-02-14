@@ -19,9 +19,7 @@ bool TftCluster::PerformInitialization()
     _tft->begin();
     _tft->fillScreen(ILI9341_BLACK);    
     _tft->setFont(roboto32);
-    _tft->setTextColor(ILI9341_RED, ILI9341_BLACK);
-    _tft->fillRect(0, 76, 240, 4, ILI9341_RED);
-    _tft->fillRect(0, 241, 240, 4, ILI9341_RED);
+    _tft->setTextColor(ILI9341_WHITE, ILI9341_BLACK);
     _tft->printAligned("welcome", gTextAlignMiddleCenter, gTextEraseFullLine);
     _isInitializationStarted = true;
   }
@@ -31,8 +29,9 @@ bool TftCluster::PerformInitialization()
 
 void TftCluster::FinishInitialization()
 {
+  _tft->fillScreen(ILI9341_BLACK);
+  _tft->setTextScale(3);
   _isInitializationStarted = false;  
-  DisplayGear('N');
 }
 
 void TftCluster::UpdateData(ClusterData clusterData)
@@ -46,6 +45,7 @@ void TftCluster::UpdateData(ClusterData clusterData)
 
 void TftCluster::DisplayGear(char gear)
 {
-  _tft->setTextScale(3);
-  _tft->printAligned(String(gear), gTextAlignMiddleCenter, gTextEraseFullLine);
+  _tft->fillRect(80, 100, 80, 112, ILI9341_RED);
+  _tft->fillRect(83, 103, 74, 106, ILI9341_BLACK);
+  _tft->printAligned(String(gear), gTextAlignMiddleCenter);
 }

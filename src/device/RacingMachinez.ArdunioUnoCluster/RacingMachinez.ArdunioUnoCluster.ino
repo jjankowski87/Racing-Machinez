@@ -1,4 +1,3 @@
-#include <LiquidCrystal.h>
 #include <AccelStepper.h>
 #include <Arduino.h>
 #include <SPI.h>

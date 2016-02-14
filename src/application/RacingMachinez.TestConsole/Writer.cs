@@ -1,11 +1,17 @@
 ﻿using System.IO.Ports;
 using RacingMachinez.Contracts;
+using System;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace RacingMachinez.TestConsole
 {
-    public class Writer
+    public class Writer : IDisposable
     {
         private readonly SerialPort _arduinoPort;
+        private readonly GameDataQueryBuilder _queryBuilder = new GameDataQueryBuilder();
+        private GameData _previousGameData = new GameData();
 
         public Writer()
         {
@@ -17,20 +23,55 @@ namespace RacingMachinez.TestConsole
             _arduinoPort.DataBits = 8;
             _arduinoPort.Handshake = Handshake.None;
             _arduinoPort.RtsEnable = true;
+
+            _arduinoPort.ReadTimeout = 100;
+            _arduinoPort.WriteTimeout = 100;
+
+            _arduinoPort.Open();
+        }
+
+        public void Dispose()
+        {
+            _arduinoPort.Close();
         }
 
         public void Send(GameData gameData)
         {
-            try
+            var dataString = _queryBuilder.Build(gameData, _previousGameData);
+            if (dataString != string.Empty)
             {
-                _arduinoPort.Open();
-                // TODO: send gear only when it was changed
-                _arduinoPort.WriteLine(string.Format("s={0};r={1};g={2};", gameData.Speed, gameData.Revs, gameData.Gear));
+                _arduinoPort.WriteLine(dataString);
             }
-            finally
+
+            _previousGameData = gameData;
+        }
+    }
+
+    public class GameDataQueryBuilder
+    {
+        private readonly IDictionary<string, Func<GameData, string>> _dataBuilders = new Dictionary<string, Func<GameData, string>>
             {
-                _arduinoPort.Close();
+                { "s", gameData => gameData.Speed.ToString() },
+                { "r", gameData => gameData.Revs.ToString() },
+                { "g", gameData => gameData.Gear.ToString() }
+            };
+
+        public string Build(GameData currentGameData, GameData previousGameData)
+        {
+            var stringBuilder = new StringBuilder();
+
+            foreach (var builder in _dataBuilders)
+            {
+                var currentValue = builder.Value(currentGameData);
+                var previousValue = builder.Value(previousGameData);
+
+                if (currentGameData != previousGameData)
+                {
+                    stringBuilder.AppendFormat("{0}={1};", builder.Key, currentValue);
+                }
             }
+
+            return stringBuilder.ToString();
         }
     }
 }
