@@ -1,9 +1,17 @@
-﻿namespace RacingMachinez.Contracts.Plugins
+﻿using System;
+
+namespace RacingMachinez.Contracts.Plugins
 {
     public interface IGamePlugin
     {
         string GameName { get; }
 
-        GameData GetGameData();
+        GameData GameData { get; }
+
+        bool IsRunning { get; }
+
+        event EventHandler<GameDataChangedEventArgs> GameDataChanged;
+
+        event EventHandler<GameStateChangedEventArgs> GameStateChanged;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using System.ComponentModel.Composition;
 using System.IO.MemoryMappedFiles;
 using RacingMachinez.Contracts;
@@ -7,57 +8,91 @@ using RacingMachinez.Contracts.Plugins;
 namespace RacingMachinez.Plugins.ProjectCars
 {
     [Export(typeof (IGamePlugin))]
-    public class ProjectCarsPlugin : IGamePlugin
+    public class ProjectCarsPlugin : IGamePlugin, IDisposable
     {
+        private const string MemoryFileName = "$pcars$";
+
         private readonly ProjectCarsGameDataReader _dataReader;
 
+        private readonly Timer _gameDataTimer;
+
+        public event EventHandler<GameDataChangedEventArgs> GameDataChanged;
+
+        public event EventHandler<GameStateChangedEventArgs> GameStateChanged;
+
         public string GameName => "Project CARS";
+
+        public bool IsRunning { get; private set; }
+
+        public GameData GameData { get; private set; }
 
         public ProjectCarsPlugin()
         {
             _dataReader = new ProjectCarsGameDataReader();
+
+            _gameDataTimer = new Timer { Interval = 25, AutoReset = true, Enabled = true };
+            _gameDataTimer.Elapsed += GameDataTimerElapsed;
         }
 
-        public GameData GetGameData()
+        public void Dispose()
+        {
+            if (_gameDataTimer != null)
+            {
+                _gameDataTimer.Enabled = false;
+                _gameDataTimer.Dispose();
+            }
+        }
+
+        private void GameDataTimerElapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
-                using (var file = MemoryMappedFile.OpenExisting("$pcars$"))
+                using (var file = MemoryMappedFile.OpenExisting(MemoryFileName))
                 {
                     using (var viewAccessor = file.CreateViewAccessor())
                     {
-                        var gameData = _dataReader.ReadData(viewAccessor);
+                        ChangeGameState(true);
 
-                        return new GameData
+                        var gameData = ProjectCarsGameDataConverter.ConvertGameData(_dataReader.ReadData(viewAccessor));
+                        if (!gameData.Equals(GameData))
                         {
-                            Revs = (ushort)gameData.CarState.Rpm,
-                            Speed = (ushort)(gameData.CarState.Speed * 3.6f),
-                            Gear = ConvertGear(gameData.CarState.Gear)
-                        };
+                            GameData = gameData;
+                            FireGameDataChangedEvent();
+                        }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
+                ChangeGameState(false);
             }
-
-            return new GameData();
         }
 
-        private static char ConvertGear(int gear)
+        private void ChangeGameState(bool isRunning)
         {
-            if (gear >= 1 && gear <= 9)
+            if (isRunning == IsRunning)
             {
-                return Convert.ToChar(48 + gear);
+                return;
             }
 
-            if (gear < 0)
-            {
-                return 'R';
-            }
+            IsRunning = isRunning;
+            FireGameStateChangedEvent();
+        }
 
-            return 'N';
+        private void FireGameDataChangedEvent()
+        {
+            if (GameDataChanged != null)
+            {
+                GameDataChanged(this, new GameDataChangedEventArgs(GameData));
+            }
+        }
+
+        private void FireGameStateChangedEvent()
+        {
+            if (GameStateChanged != null)
+            {
+                GameStateChanged(this, new GameStateChangedEventArgs(IsRunning));
+            }
         }
     }
 }

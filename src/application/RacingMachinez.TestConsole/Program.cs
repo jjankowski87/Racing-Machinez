@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Threading;
 using RacingMachinez.Core;
 using RacingMachinez.Core.Logging;
+using RacingMachinez.Contracts;
 
 namespace RacingMachinez.TestConsole
 {
     internal class Program
     {
+        private static Writer arduino = new Writer();
+
         public static void Main(string[] args)
         {
             var logger = new DefaultLogger();
@@ -14,22 +16,21 @@ namespace RacingMachinez.TestConsole
             var plugins = pluginsManager.LoadPlugins("Plugins");
             var plugin = plugins[0];
 
-            using (var arduino = new Writer())
-            {
-                while (true)
-                {
-                    try
-                    {
-                        arduino.Send(plugin.GetGameData());
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex);
-                    }
+            plugin.GameStateChanged += Plugin_GameStateChanged;
+            plugin.GameDataChanged += Plugin_GameDataChanged;
 
-                    Thread.Sleep(25);
-                }
-            }
+            Console.ReadKey();
+            arduino.Dispose();
+        }
+
+        private static void Plugin_GameDataChanged(object sender, GameDataChangedEventArgs e)
+        {
+            arduino.Send(e.GameData);
+        }
+
+        private static void Plugin_GameStateChanged(object sender, GameStateChangedEventArgs e)
+        {
+            Console.WriteLine(e.IsRunning ? "Game is running" : "Game is stopped");
         }
     }
 }

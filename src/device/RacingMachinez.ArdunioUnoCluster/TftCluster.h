@@ -18,8 +18,7 @@ private:
   ILI9341_due* _tft;
   char _previousGear;
   bool _isInitializationStarted;
-  
-  void DisplayGear(char gear);
+  bool _isGearDisplayPrepared;
 };
 
 #endif

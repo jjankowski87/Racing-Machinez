@@ -7,10 +7,13 @@ StepperMotor::StepperMotor(int motorIn1, int motorIn2, int motorIn3, int motorIn
   _initializationValue = initializationValue;
   _initializationPhase = 0;
 
-  _stepper->setCurrentPosition(0);
-  _stepper->setMaxSpeed(700);
-  _stepper->setAcceleration(3000.0f);
-  _stepper->setSpeed(700);
+  _stepper->setCurrentPosition(0);  
+  _stepper->setAcceleration(600.0f);
+  _stepper->setMaxSpeed(550);
+  
+//  _stepper->setMaxSpeed(500);
+//  _stepper->setAcceleration(700.0f);
+//  _stepper->setSpeed(500);
 }
 
 StepperMotor::~StepperMotor()

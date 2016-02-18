@@ -43,7 +43,7 @@ namespace RacingMachinez.TestConsole
                 _arduinoPort.WriteLine(dataString);
             }
 
-            _previousGameData = gameData;
+            _previousGameData = (GameData)gameData.Clone();
         }
     }
 

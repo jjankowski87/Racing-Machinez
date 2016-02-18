@@ -3,7 +3,7 @@ using System.Text;
 
 namespace RacingMachinez.Plugins.ProjectCars
 {
-    public static class UnmanagedMemoryAccessorExtensions
+    internal static class UnmanagedMemoryAccessorExtensions
     {
         public static string ReadString(this UnmanagedMemoryAccessor memoryAccessor, long position, int length)
         {

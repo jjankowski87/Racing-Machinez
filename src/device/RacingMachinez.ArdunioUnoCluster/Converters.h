@@ -11,7 +11,7 @@ public:
 private:
   static const int MIN_SPEED = 0;
   // TODO: change MAX_SPEED to to max position of indicator
-  static const int MAX_SPEED = 260;
+  static const int MAX_SPEED = 290;
   static const float SPEED_FACTOR = 0.97166f;
   
   static const int MIN_REVS = 0;
