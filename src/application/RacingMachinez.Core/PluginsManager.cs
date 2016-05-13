@@ -5,36 +5,35 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using RacingMachinez.Contracts.Plugins;
 using RacingMachinez.Core.Interfaces;
 using RacingMachinez.Core.Interfaces.Logging;
 
 namespace RacingMachinez.Core
 {
-    public class GamePluginsManager : IGamePluginsManager
+    public class PluginsManager<T> : IPluginsManager<T>
     {
         private const string LibraryFileExtension = "*.dll";
 
-        [ImportMany] private Lazy<IGamePlugin, IDictionary<string, object>>[] _gamePlugins = null;
+        [ImportMany] private Lazy<T, IDictionary<string, object>>[] _plugins = null;
 
         private readonly ILogger _logger;
 
-        public GamePluginsManager(ILogger logger)
+        public PluginsManager(ILogger logger)
         {
             _logger = logger;
         }
 
-        public IList<IGamePlugin> LoadPlugins(string pluginDirectory)
+        public IList<T> LoadPlugins(string pluginDirectory)
         {
-            if (_gamePlugins == null)
+            if (_plugins == null)
             {
-                LoadGamePlugins(pluginDirectory);
+                ComposePlugins(pluginDirectory);
             }
 
-            return _gamePlugins.Select(p => p.Value).ToList();
+            return _plugins.Select(p => p.Value).ToList();
         }
 
-        private void LoadGamePlugins(string pluginDirectory)
+        private void ComposePlugins(string pluginDirectory)
         {
             try
             {
@@ -47,7 +46,7 @@ namespace RacingMachinez.Core
             catch (Exception exception)
             {
                 _logger.LogError(exception);
-                _gamePlugins = new Lazy<IGamePlugin, IDictionary<string, object>>[0];
+                _plugins = new Lazy<T, IDictionary<string, object>>[0];
             }
         }
     }

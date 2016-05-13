@@ -50,20 +50,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Writer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.ProjectCars\bin\Release\RacingMachinez.Plugins.ProjectCars.dll">
-      <Link>Plugins\RacingMachinez.Plugins.ProjectCars.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.TestSample\bin\Release\RacingMachinez.Plugins.TestSample.dll">
-      <Link>Plugins\RacingMachinez.Plugins.TestSample.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RacingMachinez.Contracts\RacingMachinez.Contracts.csproj">
@@ -78,6 +67,17 @@
       <Project>{38254D1F-9D06-4AC0-B697-74CF55507E0C}</Project>
       <Name>RacingMachinez.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.Clusters.Auduino\bin\Release\RacingMachinez.Plugins.Clusters.Auduino.dll">
+      <Link>Plugins\RacingMachinez.Plugins.Clusters.Auduino.dll</Link>
+    </Content>
+    <Content Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.Games.ProjectCars\bin\Release\RacingMachinez.Plugins.Games.ProjectCars.dll">
+      <Link>Plugins\RacingMachinez.Plugins.Games.ProjectCars.dll</Link>
+    </Content>
+    <Content Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.Games.TestSample\bin\Release\RacingMachinez.Plugins.Games.TestSample.dll">
+      <Link>Plugins\RacingMachinez.Plugins.Games.TestSample.dll</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,7 +8,7 @@ using RacingMachinez.Contracts.Plugins;
 namespace RacingMachinez.Plugins.ProjectCars
 {
     [Export(typeof (IGamePlugin))]
-    public class ProjectCarsPlugin : IGamePlugin, IDisposable
+    public class ProjectCarsPlugin : IGamePlugin
     {
         private const string MemoryFileName = "$pcars$";
 
@@ -36,11 +36,8 @@ namespace RacingMachinez.Plugins.ProjectCars
 
         public void Dispose()
         {
-            if (_gameDataTimer != null)
-            {
-                _gameDataTimer.Enabled = false;
-                _gameDataTimer.Dispose();
-            }
+            _gameDataTimer.Enabled = false;
+            _gameDataTimer.Dispose();
         }
 
         private void GameDataTimerElapsed(object sender, ElapsedEventArgs e)
@@ -81,18 +78,12 @@ namespace RacingMachinez.Plugins.ProjectCars
 
         private void FireGameDataChangedEvent()
         {
-            if (GameDataChanged != null)
-            {
-                GameDataChanged(this, new GameDataChangedEventArgs(GameData));
-            }
+            GameDataChanged?.Invoke(this, new GameDataChangedEventArgs(GameData));
         }
 
         private void FireGameStateChangedEvent()
         {
-            if (GameStateChanged != null)
-            {
-                GameStateChanged(this, new GameStateChangedEventArgs(IsRunning));
-            }
+            GameStateChanged?.Invoke(this, new GameStateChangedEventArgs(IsRunning));
         }
     }
 }

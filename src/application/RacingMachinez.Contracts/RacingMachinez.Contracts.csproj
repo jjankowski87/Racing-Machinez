@@ -43,6 +43,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ClusterConfiguration.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="GameDataChangedEventArgs.cs" />
     <Compile Include="GameStateChangedEventArgs.cs" />

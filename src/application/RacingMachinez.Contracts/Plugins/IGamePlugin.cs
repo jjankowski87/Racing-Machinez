@@ -2,7 +2,7 @@
 
 namespace RacingMachinez.Contracts.Plugins
 {
-    public interface IGamePlugin
+    public interface IGamePlugin : IDisposable
     {
         string GameName { get; }
 

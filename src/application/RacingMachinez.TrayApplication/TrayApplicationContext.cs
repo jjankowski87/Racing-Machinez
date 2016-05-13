@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RacingMachinez.TrayApplication.Configuration.Interfaces;
+using RacingMachinez.TrayApplication.Framework;
+using System;
 using System.Windows.Forms;
 
 namespace RacingMachinez.TrayApplication
@@ -7,10 +9,11 @@ namespace RacingMachinez.TrayApplication
     {
         private readonly NotifyIcon _notifyIcon;
 
-        private ConfigurationForm _configurationForm;
+        private IFormManager _formManager;
 
-        public TrayApplicationContext()
+        public TrayApplicationContext(IFormManager formManager)
         {
+            _formManager = formManager;
             _notifyIcon = new NotifyIcon
                 {
                     Text = Resources.Strings.ApplicationName,
@@ -32,14 +35,7 @@ namespace RacingMachinez.TrayApplication
 
         private void OnConfigurationClicked(object sender, EventArgs e)
         {
-            if (_configurationForm == null || _configurationForm.IsDisposed)
-            {
-                _configurationForm = new ConfigurationForm();
-                _configurationForm.Show();
-                return;
-            }
-
-            _configurationForm.Activate();
+            _formManager.ShowView<IConfigurationView>();
         }
     }
 }

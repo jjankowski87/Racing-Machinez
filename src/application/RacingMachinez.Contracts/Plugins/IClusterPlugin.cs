@@ -1,9 +1,14 @@
-﻿namespace RacingMachinez.Contracts.Plugins
+﻿using System;
+
+namespace RacingMachinez.Contracts.Plugins
 {
-    public interface IClusterPlugin
+    public interface IClusterPlugin : IDisposable
     {
         string ClusterName { get; }
 
-        void SetGameData(GameData gameData);
+        bool Connect(ClusterConfiguration configuration);
+
+        // TODO: add methods for initialization/calibration/gaming
+        void UpdateGameData(GameData gameData);
     }
 }

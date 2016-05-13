@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6566E1D5-8AAF-4C1D-95A2-1D34AD111B7F}</ProjectGuid>
+    <ProjectGuid>{F3C63E8A-175A-4FDA-AD68-AA52FF3DAFBF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RacingMachinez.Plugins.TestSample</RootNamespace>
-    <AssemblyName>RacingMachinez.Plugins.TestSample</AssemblyName>
+    <RootNamespace>RacingMachinez.Plugins.Clusters.Auduino</RootNamespace>
+    <AssemblyName>RacingMachinez.Plugins.Clusters.Auduino</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="RacingMachinez.Contracts, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RacingMachinez.Contracts\bin\Release\RacingMachinez.Contracts.dll</HintPath>
+      <HintPath>..\..\RacingMachinez.Contracts\bin\Debug\RacingMachinez.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -45,8 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestSample.cs" />
+    <Compile Include="AuduinoPlugin.cs" />
+    <Compile Include="GameDataQueryBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Writer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

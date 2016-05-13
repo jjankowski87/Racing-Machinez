@@ -2,33 +2,43 @@
 using RacingMachinez.Core;
 using RacingMachinez.Core.Logging;
 using RacingMachinez.Contracts;
+using RacingMachinez.Contracts.Plugins;
+using System.IO.Ports;
 
 namespace RacingMachinez.TestConsole
 {
     internal class Program
     {
-        private static Writer arduino = new Writer();
+        public static IClusterPlugin cluster;
 
         public static void Main(string[] args)
         {
-            var logger = new DefaultLogger();
-            var pluginsManager = new GamePluginsManager(logger);
-            var plugins = pluginsManager.LoadPlugins("Plugins");
-            var plugin = plugins[0];
+            var names = SerialPort.GetPortNames();
 
-            plugin.GameStateChanged += Plugin_GameStateChanged;
-            plugin.GameDataChanged += Plugin_GameDataChanged;
+            var logger = new DefaultLogger();
+            var gamePluginsManager = new PluginsManager<IGamePlugin>(logger);
+            var clusterPluginsManager = new PluginsManager<IClusterPlugin>(logger);
+
+            var gamePlugins = gamePluginsManager.LoadPlugins("Plugins");
+            var clusterPlugins = clusterPluginsManager.LoadPlugins("Plugins");
+            var gamePlugin = gamePlugins[1];
+            cluster = clusterPlugins[0];
+            gamePlugin.GameStateChanged += PluginGameStateChanged;
+            gamePlugin.GameDataChanged += PluginGameDataChanged;
+
+            var connected = cluster.Connect(new ClusterConfiguration { PortName = "COM3" });
 
             Console.ReadKey();
-            arduino.Dispose();
+            cluster.Dispose();
+            gamePlugin.Dispose();
         }
 
-        private static void Plugin_GameDataChanged(object sender, GameDataChangedEventArgs e)
+        private static void PluginGameDataChanged(object sender, GameDataChangedEventArgs e)
         {
-            arduino.Send(e.GameData);
+            cluster.UpdateGameData(e.GameData);
         }
 
-        private static void Plugin_GameStateChanged(object sender, GameStateChangedEventArgs e)
+        private static void PluginGameStateChanged(object sender, GameStateChangedEventArgs e)
         {
             Console.WriteLine(e.IsRunning ? "Game is running" : "Game is stopped");
         }

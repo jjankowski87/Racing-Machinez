@@ -1,4 +1,8 @@
-﻿using System;
+﻿using RacingMachinez.TrayApplication.Configuration;
+using RacingMachinez.TrayApplication.Configuration.Interfaces;
+using RacingMachinez.TrayApplication.Framework;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -23,7 +27,7 @@ namespace RacingMachinez.TrayApplication
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new TrayApplicationContext());
+                    Application.Run(CompositionRoot.Create());
                 }
                 else
                 {
