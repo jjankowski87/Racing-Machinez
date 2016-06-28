@@ -1,23 +1,23 @@
-#ifndef SerialReader_h
-#define SerialReader_h
+#ifndef SerialCommunicator_h
+#define SerialCommunicator_h
 
 #include "ClusterData.h"
 #include <Arduino.h>
 
-class SerialReader
+class SerialCommunicator
 {
 public:
-  SerialReader();
+  SerialCommunicator();
   
   void Initialize();
   void Read(ClusterData* clusterData);
-  
+  void SendClusterState(ClusterData* clusterData);
 private:
   const int STRING_MAX_LENGTH = 64;
   String _inputString;
   int _inputLength;
  
-  void ParseClusterData(ClusterData* clusterData);
+  void ParseInputMessage(ClusterData* clusterData);
   void ParseSpeed(ClusterData* clusterData);
   void ParseRevs(ClusterData* clusterData);
   void ParseClusterMode(ClusterData* clusterData);

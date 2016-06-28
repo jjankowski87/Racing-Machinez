@@ -9,6 +9,8 @@
 
 Controller controller(Tachometer | Speedometer | Tft);
 
+boolean isInitialized = false;
+
 void setup()
 {
   controller.Setup();
@@ -16,10 +18,27 @@ void setup()
 
 void loop()
 {
-  controller.Update();
+  if (IsDeviceInitialized())
+  {
+    controller.Update();  
+  }
 }
 
 void serialEvent()
 {
   controller.SerialEvent();
 }
+
+bool IsDeviceInitialized()
+{
+  if (!isInitialized)
+  {
+    if (millis() > 1000)
+    {
+      isInitialized = true;
+    }
+  }
+
+  return isInitialized;
+}
+

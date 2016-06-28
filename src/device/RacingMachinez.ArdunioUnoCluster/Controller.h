@@ -1,7 +1,7 @@
 #ifndef Controller_h
 #define Controller_h
 
-#include "SerialReader.h"
+#include "SerialCommunicator.h"
 #include "IClusterItem.h"
 
 class Controller
@@ -17,7 +17,7 @@ private:
   static const int SPEED_AND_REVS_SCALE_ANGLE = 252;
   
   IClusterItem** _clusterItems;
-  SerialReader* _serialReader;
+  SerialCommunicator* _serialCommunicator;
   ClusterData _clusterData;
   int _numberOfClusterItems;
   

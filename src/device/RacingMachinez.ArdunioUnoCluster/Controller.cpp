@@ -6,9 +6,7 @@
 
 Controller::Controller(ClusterItems clusterItems)
 {
-  _serialReader = new SerialReader();
-  _clusterData.State = Initialization;
-  
+  _serialCommunicator = new SerialCommunicator();
   InitializeClusterItems(clusterItems);
 }
 
@@ -20,12 +18,14 @@ Controller::~Controller()
   }
   
   delete [] _clusterItems;
-  delete _serialReader;
+  delete _serialCommunicator;
 }
 
 void Controller::Setup()
 {
-  _serialReader->Initialize();
+  _clusterData.State = Initialization;
+  _serialCommunicator->Initialize();
+  _serialCommunicator->SendClusterState(&_clusterData);
 }
 
 void Controller::Update()
@@ -45,7 +45,7 @@ void Controller::SerialEvent()
 {
   if (_clusterData.State != Initialization)
   {
-    _serialReader->Read(&_clusterData);
+    _serialCommunicator->Read(&_clusterData);
   }
 }
 
@@ -94,5 +94,6 @@ void Controller::PerformClusterInitialization()
     }  
     
     _clusterData.State = Working;
+    _serialCommunicator->SendClusterState(&_clusterData);
   } 
 }
