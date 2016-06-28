@@ -21,13 +21,14 @@ private:
   AccelStepper* _stepper;
   ClusterState _previousState;
   int _previousAngle;
+  int _previousWorkingAngle;
+  long _previousWorkingPosition;
   int _initializationValue;
   short int _initializationPhase;
   ConvertToAngleFunction _convertToAngleFunction;  
   
   int CalculateAngle(ClusterData clusterData);
   void Move(int angle, ClusterState clusterState);
-  boolean HasStateChangedFrom(ClusterState currentState, ClusterState requiredState);
 };
 
 #endif

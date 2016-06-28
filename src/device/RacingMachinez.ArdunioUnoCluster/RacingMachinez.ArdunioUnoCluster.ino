@@ -42,3 +42,4 @@ bool IsDeviceInitialized()
   return isInitialized;
 }
 
+

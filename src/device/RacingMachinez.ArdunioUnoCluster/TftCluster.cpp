@@ -60,3 +60,4 @@ void TftCluster::UpdateData(ClusterData clusterData)
     }
   }
 }
+

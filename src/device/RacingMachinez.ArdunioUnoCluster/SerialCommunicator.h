@@ -16,6 +16,9 @@ private:
   const int STRING_MAX_LENGTH = 64;
   String _inputString;
   int _inputLength;
+
+  int _workingSpeed;
+  int _workingRevs;
  
   void ParseInputMessage(ClusterData* clusterData);
   void ParseSpeed(ClusterData* clusterData);
@@ -26,3 +29,4 @@ private:
 };
 
 #endif
+

@@ -10,10 +10,6 @@ StepperMotor::StepperMotor(int motorIn1, int motorIn2, int motorIn3, int motorIn
   _stepper->setCurrentPosition(0);  
   _stepper->setAcceleration(600.0f);
   _stepper->setMaxSpeed(550);
-  
-//  _stepper->setMaxSpeed(500);
-//  _stepper->setAcceleration(700.0f);
-//  _stepper->setSpeed(500);
 }
 
 StepperMotor::~StepperMotor()
@@ -48,8 +44,17 @@ void StepperMotor::FinishInitialization()
 
 void StepperMotor::UpdateData(ClusterData clusterData)
 {
-  if (HasStateChangedFrom(clusterData.State, Calibration))
+  if (_previousState == Calibration && clusterData.State != Calibration)
   {
+    _previousAngle = _previousWorkingAngle;
+    _stepper->setCurrentPosition(_previousWorkingPosition);
+  }
+  else if (_previousState != Calibration && clusterData.State == Calibration)
+  {
+    _previousWorkingPosition = _stepper->currentPosition();
+    _previousWorkingAngle = _previousAngle;
+    
+    _previousAngle = 0;
     _stepper->setCurrentPosition(0);
   }
   
@@ -59,8 +64,8 @@ void StepperMotor::UpdateData(ClusterData clusterData)
     Move(angle, clusterData.State);
     _previousAngle = angle;
   }
-  
-  _previousState = clusterData.State;
+
+  _previousState = clusterData.State;  
   _stepper->run();
 }
 
@@ -88,9 +93,4 @@ void StepperMotor::Move(int angle, ClusterState clusterState)
       _stepper->move(angle * ANGLE_TO_STEPS);
       break;
   }
-}
-
-boolean StepperMotor::HasStateChangedFrom(ClusterState currentState, ClusterState requiredState)
-{
-  return _previousState == requiredState && currentState != requiredState;
 }

@@ -14,3 +14,4 @@ class IClusterItem
 };
 
 #endif
+

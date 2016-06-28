@@ -42,10 +42,10 @@ void SerialCommunicator::ParseInputMessage(ClusterData* clusterData)
     SendClusterState(clusterData);
     return;
   }
-  
+
+  ParseClusterMode(clusterData);
   ParseSpeed(clusterData);
   ParseRevs(clusterData);
-  ParseClusterMode(clusterData);
   ParseGear(clusterData);
 }
 
@@ -72,6 +72,8 @@ void SerialCommunicator::ParseClusterMode(ClusterData* clusterData)
   String state = ParseInputMessage("m");
   if (state != "")
   {
+    ClusterState previousState = clusterData->State;
+    
     int mode = state.toInt();
     if (mode >= 2 && mode <= 3)
     {
@@ -82,6 +84,20 @@ void SerialCommunicator::ParseClusterMode(ClusterData* clusterData)
       clusterData->State = Working;
     }
 
+    if (previousState == Working && clusterData->State == Calibration)
+    {
+      _workingSpeed = clusterData->Speed;
+      _workingRevs = clusterData->Revs;
+      
+      clusterData->Speed = 0;
+      clusterData->Revs = 0;
+    }
+    else if (previousState == Calibration && clusterData->State == Working)
+    {
+      clusterData->Speed = _workingSpeed;
+      clusterData->Revs = _workingRevs;
+    }
+    
     SendClusterState(clusterData);
   }
 }
@@ -111,3 +127,4 @@ String SerialCommunicator::ParseInputMessage(String property)
   
   return _inputString.substring(startIndex + property.length() + 1, endIndex);
 }
+

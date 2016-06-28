@@ -22,3 +22,4 @@ inline ClusterItems operator|(ClusterItems a, ClusterItems b)
 }
 
 #endif
+

@@ -97,3 +97,4 @@ void Controller::PerformClusterInitialization()
     _serialCommunicator->SendClusterState(&_clusterData);
   } 
 }
+

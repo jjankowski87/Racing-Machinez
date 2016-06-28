@@ -34,3 +34,4 @@ int Converters::Normalize(int value, int minValue, int maxValue)
   
   return value;
 }
+
