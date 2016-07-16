@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Timers;
 using RacingMachinez.Contracts;
 using RacingMachinez.Contracts.Plugins;
 
@@ -12,61 +11,65 @@ namespace RacingMachinez.Plugins.TestSample
     {
         private StreamReader reader;
 
-        private Timer _gameDataTimer;
-
-        public event EventHandler<GameDataChangedEventArgs> GameDataChanged;
-
-        public event EventHandler<GameStateChangedEventArgs> GameStateChanged;
-
-        public GameData GameData { get; private set; }
-
         public string GameName => "Test Sample";
-
-        public bool IsRunning => true;
 
         public TestSample()
         {
-            _gameDataTimer = new Timer { Interval = 25, AutoReset = true, Enabled = true };
-            _gameDataTimer.Elapsed += GameDataTimerElapsed;
-
-            reader = new StreamReader("Sample.txt");
+            try
+            {
+                reader = new StreamReader("Sample.txt");
+            }
+            catch (Exception ex)
+            {
+                reader = null;
+            }
         }
 
-        public void Dispose()
+        public bool IsRunning()
         {
-            _gameDataTimer.Enabled = false;
-            _gameDataTimer.Dispose();
-            reader.Close();
-            reader.Dispose();
+            return reader != null;
         }
 
-        private void GameDataTimerElapsed(object sender, ElapsedEventArgs e)
+        public GameData GetGameData()
         {
-            if (reader.EndOfStream)
+            if (reader == null)
             {
-                reader.BaseStream.Position = 0;
+                return null;
             }
 
-            var line = reader.ReadLine();
-            var parts = line.Split(';');
-
-            GameData = new GameData();
-            if (parts.Length > 0)
+            try
             {
-                GameData.Speed = short.Parse(parts[0]);
-            }
+                if (reader.EndOfStream)
+                {
+                    reader.BaseStream.Position = 0;
+                }
 
-            if (parts.Length > 1)
+                var line = reader.ReadLine();
+                var parts = line.Split(';');
+
+                var gameData = new GameData();
+                if (parts.Length > 0)
+                {
+                    gameData.Speed = short.Parse(parts[0]);
+                }
+
+                if (parts.Length > 1)
+                {
+                    gameData.Revs = short.Parse(parts[1]);
+                }
+
+                if (parts.Length > 2)
+                {
+                    gameData.Gear = parts[2][0];
+                }
+
+                return gameData;
+            }
+            catch(Exception ex)
             {
-                GameData.Revs = short.Parse(parts[1]);
+                reader = null;
+                return null;
             }
-
-            if (parts.Length > 2)
-            {
-                GameData.Gear = parts[2][0];
-            }
-
-            GameDataChanged?.Invoke(this, new GameDataChangedEventArgs(GameData));
         }
     }
 }

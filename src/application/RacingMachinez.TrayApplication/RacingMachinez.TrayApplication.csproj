@@ -67,6 +67,10 @@
     <Compile Include="Framework\IPresenter.cs" />
     <Compile Include="Framework\IView.cs" />
     <Compile Include="Framework\PresenterBase.cs" />
+    <Compile Include="Framework\UsbNotificationNativeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Framework\UserNotifier.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Graphics.Designer.cs">
@@ -97,7 +101,29 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.Clusters.Auduino\bin\Debug\RacingMachinez.Plugins.Clusters.Auduino.dll">
+      <Link>Plugins\RacingMachinez.Plugins.Clusters.Auduino.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.Games.ProjectCars\bin\Debug\RacingMachinez.Plugins.Games.ProjectCars.dll">
+      <Link>Plugins\RacingMachinez.Plugins.Games.ProjectCars.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Tachometer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RacingMachinez.Contracts\RacingMachinez.Contracts.csproj">
+      <Project>{69D97B1C-9086-417A-B6BB-A1E083A7FFB3}</Project>
+      <Name>RacingMachinez.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RacingMachinez.Core.Interfaces\RacingMachinez.Core.Interfaces.csproj">
+      <Project>{6eaf9128-8f9f-4297-bcc4-e1a946b488c9}</Project>
+      <Name>RacingMachinez.Core.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RacingMachinez.Core\RacingMachinez.Core.csproj">
+      <Project>{38254d1f-9d06-4ac0-b697-74cf55507e0c}</Project>
+      <Name>RacingMachinez.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

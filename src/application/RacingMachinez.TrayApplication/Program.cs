@@ -1,8 +1,4 @@
-﻿using RacingMachinez.TrayApplication.Configuration;
-using RacingMachinez.TrayApplication.Configuration.Interfaces;
-using RacingMachinez.TrayApplication.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;

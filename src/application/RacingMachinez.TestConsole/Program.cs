@@ -9,7 +9,7 @@ namespace RacingMachinez.TestConsole
 {
     internal class Program
     {
-        public static IClusterPlugin cluster;
+        public static ICluster cluster;
 
         public static void Main(string[] args)
         {
@@ -17,20 +17,20 @@ namespace RacingMachinez.TestConsole
 
             var logger = new DefaultLogger();
             var gamePluginsManager = new PluginsManager<IGamePlugin>(logger);
-            var clusterPluginsManager = new PluginsManager<IClusterPlugin>(logger);
+            var clusterPluginsManager = new PluginsManager<ICluster>(logger);
 
-            var gamePlugins = gamePluginsManager.LoadPlugins("Plugins");
-            var clusterPlugins = clusterPluginsManager.LoadPlugins("Plugins");
+            var gamePlugins = gamePluginsManager.ReloadPlugins("Plugins");
+            var clusterPlugins = clusterPluginsManager.ReloadPlugins("Plugins");
             var gamePlugin = gamePlugins[1];
             cluster = clusterPlugins[0];
-            gamePlugin.GameStateChanged += PluginGameStateChanged;
-            gamePlugin.GameDataChanged += PluginGameDataChanged;
+            //gamePlugin.GameStateChanged += PluginGameStateChanged;
+            //gamePlugin.GameDataChanged += PluginGameDataChanged;
 
-            var connected = cluster.Connect(new ClusterConfiguration { PortName = "COM3" });
+           // var connected = cluster.Connect(new ClusterConfiguration { PortName = "COM3" });
 
             Console.ReadKey();
             cluster.Dispose();
-            gamePlugin.Dispose();
+            //gamePlugin.Dispose();
         }
 
         private static void PluginGameDataChanged(object sender, GameDataChangedEventArgs e)

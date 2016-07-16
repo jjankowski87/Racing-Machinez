@@ -1,17 +1,11 @@
-﻿using System;
-
-namespace RacingMachinez.Contracts.Plugins
+﻿namespace RacingMachinez.Contracts.Plugins
 {
-    public interface IGamePlugin : IDisposable
+    public interface IGamePlugin
     {
         string GameName { get; }
 
-        GameData GameData { get; }
+        bool IsRunning();
 
-        bool IsRunning { get; }
-
-        event EventHandler<GameDataChangedEventArgs> GameDataChanged;
-
-        event EventHandler<GameStateChangedEventArgs> GameStateChanged;
+        GameData GetGameData();
     }
 }

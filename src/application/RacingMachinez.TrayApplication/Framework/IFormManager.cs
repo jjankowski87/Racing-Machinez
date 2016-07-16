@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace RacingMachinez.TrayApplication.Framework
+﻿namespace RacingMachinez.TrayApplication.Framework
 {
     public interface IFormManager
     {

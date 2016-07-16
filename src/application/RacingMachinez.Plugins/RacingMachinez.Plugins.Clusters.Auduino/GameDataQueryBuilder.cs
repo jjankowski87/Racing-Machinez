@@ -20,12 +20,9 @@ namespace RacingMachinez.Plugins.Clusters.Auduino
 
             foreach (var builder in _dataBuilders)
             {
-                var currentValue = builder.Value(currentGameData);
-                var previousValue = builder.Value(previousGameData);
-
                 if (currentGameData != previousGameData)
                 {
-                    stringBuilder.AppendFormat("{0}={1};", builder.Key, currentValue);
+                    stringBuilder.AppendFormat("{0}={1};", builder.Key, builder.Value(currentGameData));
                 }
             }
 

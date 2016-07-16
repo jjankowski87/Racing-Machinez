@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Timers;
 using System.ComponentModel.Composition;
 using System.IO.MemoryMappedFiles;
 using RacingMachinez.Contracts;
@@ -14,33 +13,29 @@ namespace RacingMachinez.Plugins.ProjectCars
 
         private readonly ProjectCarsGameDataReader _dataReader;
 
-        private readonly Timer _gameDataTimer;
-
-        public event EventHandler<GameDataChangedEventArgs> GameDataChanged;
-
-        public event EventHandler<GameStateChangedEventArgs> GameStateChanged;
-
         public string GameName => "Project CARS";
-
-        public bool IsRunning { get; private set; }
-
-        public GameData GameData { get; private set; }
 
         public ProjectCarsPlugin()
         {
             _dataReader = new ProjectCarsGameDataReader();
-
-            _gameDataTimer = new Timer { Interval = 25, AutoReset = true, Enabled = true };
-            _gameDataTimer.Elapsed += GameDataTimerElapsed;
         }
 
-        public void Dispose()
+        public bool IsRunning()
         {
-            _gameDataTimer.Enabled = false;
-            _gameDataTimer.Dispose();
+            try
+            {
+                using (var file = MemoryMappedFile.OpenExisting(MemoryFileName))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        private void GameDataTimerElapsed(object sender, ElapsedEventArgs e)
+        public GameData GetGameData()
         {
             try
             {
@@ -48,42 +43,14 @@ namespace RacingMachinez.Plugins.ProjectCars
                 {
                     using (var viewAccessor = file.CreateViewAccessor())
                     {
-                        ChangeGameState(true);
-
-                        var gameData = ProjectCarsGameDataConverter.ConvertGameData(_dataReader.ReadData(viewAccessor));
-                        if (!gameData.Equals(GameData))
-                        {
-                            GameData = gameData;
-                            FireGameDataChangedEvent();
-                        }
+                        return ProjectCarsGameDataConverter.ConvertGameData(_dataReader.ReadData(viewAccessor));
                     }
                 }
             }
             catch (Exception)
             {
-                ChangeGameState(false);
+                return null;
             }
-        }
-
-        private void ChangeGameState(bool isRunning)
-        {
-            if (isRunning == IsRunning)
-            {
-                return;
-            }
-
-            IsRunning = isRunning;
-            FireGameStateChangedEvent();
-        }
-
-        private void FireGameDataChangedEvent()
-        {
-            GameDataChanged?.Invoke(this, new GameDataChangedEventArgs(GameData));
-        }
-
-        private void FireGameStateChangedEvent()
-        {
-            GameStateChanged?.Invoke(this, new GameStateChangedEventArgs(IsRunning));
         }
     }
 }

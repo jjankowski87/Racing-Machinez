@@ -120,10 +120,34 @@
   <data name="ApplicationName" xml:space="preserve">
     <value>Racing Machinez</value>
   </data>
+  <data name="ClusterConnectedMessage" xml:space="preserve">
+    <value>{0} cluster was connected. Click to open Configuration form.</value>
+  </data>
+  <data name="ClusterConnectedTitle" xml:space="preserve">
+    <value>Cluster connected</value>
+  </data>
+  <data name="ClusterDisconnectedMessage" xml:space="preserve">
+    <value>{0} cluster was disconnected. Click to open Configuration form.</value>
+  </data>
+  <data name="ClusterDisconnectedTitle" xml:space="preserve">
+    <value>Cluster disconnected</value>
+  </data>
   <data name="Configuration" xml:space="preserve">
     <value>Configuration</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
+  </data>
+  <data name="GameStartedMessage" xml:space="preserve">
+    <value>{0} game has started. Click to open Configuration form.</value>
+  </data>
+  <data name="GameStartedTitle" xml:space="preserve">
+    <value>Game started</value>
+  </data>
+  <data name="GameStoppedMessage" xml:space="preserve">
+    <value>{0} game has stopped. Click to open Configuration form.</value>
+  </data>
+  <data name="GameStoppedTitle" xml:space="preserve">
+    <value>Game stopped</value>
   </data>
 </root>

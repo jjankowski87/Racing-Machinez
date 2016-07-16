@@ -1,16 +1,21 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Linq;
 using RacingMachinez.Contracts;
 
 namespace RacingMachinez.Plugins.Clusters.Auduino
 {
-    public class Writer : IDisposable
+    public class ComCommunicator : IDisposable
     {
-        private readonly SerialPort _arduinoPort;
         private readonly GameDataQueryBuilder _queryBuilder = new GameDataQueryBuilder();
+
         private GameData _previousGameData = new GameData();
 
-        public Writer(ClusterConfiguration configuration)
+        private SerialPort _arduinoPort;
+
+        private bool _isDisposed = false;
+
+        public ComCommunicator(ClusterConfiguration configuration)
         {
             _arduinoPort = new SerialPort(configuration.PortName);
 
@@ -28,7 +33,34 @@ namespace RacingMachinez.Plugins.Clusters.Auduino
 
         public void Dispose()
         {
-            _arduinoPort.Close();
+            Dispose(true);
+        }
+
+        public ClusterState GetState()
+        {
+            _arduinoPort.WriteLine("m");
+            var line = _arduinoPort.ReadLine();
+            var nextData = _arduinoPort.ReadExisting();
+            if (!string.IsNullOrWhiteSpace(nextData))
+            {
+                line = nextData.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Last();
+            }
+
+            if (!string.IsNullOrWhiteSpace(line))
+            {
+                ClusterState clusterStateValue;
+                if (Enum.TryParse(line, out clusterStateValue))
+                {
+                    return clusterStateValue;
+                }
+            }
+
+            return ClusterState.Unknown;
+        }
+
+        public void SetState(ClusterState state)
+        {
+            _arduinoPort.WriteLine(string.Format("m={0};", (int)state));
         }
 
         public void Send(GameData gameData)
@@ -40,6 +72,22 @@ namespace RacingMachinez.Plugins.Clusters.Auduino
             }
 
             _previousGameData = (GameData)gameData.Clone();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _arduinoPort.Close();
+                _arduinoPort = null;
+            }
+
+            _isDisposed = true;
         }
     }
 }

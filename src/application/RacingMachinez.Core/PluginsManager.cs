@@ -23,12 +23,9 @@ namespace RacingMachinez.Core
             _logger = logger;
         }
 
-        public IList<T> LoadPlugins(string pluginDirectory)
+        public IList<T> ReloadPlugins(string pluginDirectory)
         {
-            if (_plugins == null)
-            {
-                ComposePlugins(pluginDirectory);
-            }
+            ComposePlugins(pluginDirectory);
 
             return _plugins.Select(p => p.Value).ToList();
         }

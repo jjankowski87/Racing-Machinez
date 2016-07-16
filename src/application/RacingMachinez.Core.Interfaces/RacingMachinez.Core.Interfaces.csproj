@@ -43,8 +43,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DataStore\IConfigurationRepository.cs" />
+    <Compile Include="IApplicationManager.cs" />
     <Compile Include="IPluginsManager.cs" />
-    <Compile Include="IGamePluginsManager.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -4,6 +4,6 @@ namespace RacingMachinez.Core.Interfaces
 {
     public interface IPluginsManager<T>
     {
-        IList<T> LoadPlugins(string pluginDirectory);
+        IList<T> ReloadPlugins(string pluginDirectory);
     }
 }

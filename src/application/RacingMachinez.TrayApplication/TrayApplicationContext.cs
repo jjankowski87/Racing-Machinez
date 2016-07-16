@@ -2,16 +2,23 @@
 using RacingMachinez.TrayApplication.Framework;
 using System;
 using System.Windows.Forms;
+using RacingMachinez.Core.Interfaces;
 
 namespace RacingMachinez.TrayApplication
 {
     public class TrayApplicationContext : ApplicationContext
     {
+        private readonly UsbNotificationNativeForm _notificationWindow;
+
         private readonly NotifyIcon _notifyIcon;
+
+        private readonly Timer _applicationTimer;
+
+        private readonly IApplicationManager _applicationManager;
 
         private IFormManager _formManager;
 
-        public TrayApplicationContext(IFormManager formManager)
+        public TrayApplicationContext(IFormManager formManager, IApplicationManager applicationManager)
         {
             _formManager = formManager;
             _notifyIcon = new NotifyIcon
@@ -25,6 +32,17 @@ namespace RacingMachinez.TrayApplication
                         }),
                     Visible = true,
                 };
+
+            // TODO: interval configurable
+            _applicationManager = applicationManager;
+            _applicationTimer = new Timer { Enabled = true, Interval = 25 };
+            _applicationTimer.Tick += OnApplicationTimerTicked;
+            _notificationWindow = new UsbNotificationNativeForm(applicationManager);
+        }
+
+        private void OnApplicationTimerTicked(object sender, EventArgs e)
+        {
+            _applicationManager.PerformGameOperations();
         }
 
         private void OnExitClicked(object sender, EventArgs e)

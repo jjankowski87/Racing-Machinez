@@ -44,10 +44,12 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ClusterConfiguration.cs" />
+    <Compile Include="ClusterState.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="GameDataChangedEventArgs.cs" />
     <Compile Include="GameStateChangedEventArgs.cs" />
-    <Compile Include="Plugins\IClusterPlugin.cs" />
+    <Compile Include="Plugins\ICluster.cs" />
+    <Compile Include="Plugins\IClusterPluginFactory.cs" />
     <Compile Include="Plugins\IGamePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -70,6 +70,42 @@ namespace RacingMachinez.TrayApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} cluster was connected. Click to open Configuration form..
+        /// </summary>
+        internal static string ClusterConnectedMessage {
+            get {
+                return ResourceManager.GetString("ClusterConnectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cluster connected.
+        /// </summary>
+        internal static string ClusterConnectedTitle {
+            get {
+                return ResourceManager.GetString("ClusterConnectedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} cluster was disconnected. Click to open Configuration form..
+        /// </summary>
+        internal static string ClusterDisconnectedMessage {
+            get {
+                return ResourceManager.GetString("ClusterDisconnectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cluster disconnected.
+        /// </summary>
+        internal static string ClusterDisconnectedTitle {
+            get {
+                return ResourceManager.GetString("ClusterDisconnectedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configuration.
         /// </summary>
         internal static string Configuration {
@@ -84,6 +120,42 @@ namespace RacingMachinez.TrayApplication.Resources {
         internal static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} game has started. Click to open Configuration form..
+        /// </summary>
+        internal static string GameStartedMessage {
+            get {
+                return ResourceManager.GetString("GameStartedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game started.
+        /// </summary>
+        internal static string GameStartedTitle {
+            get {
+                return ResourceManager.GetString("GameStartedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} game has stopped. Click to open Configuration form..
+        /// </summary>
+        internal static string GameStoppedMessage {
+            get {
+                return ResourceManager.GetString("GameStoppedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game stopped.
+        /// </summary>
+        internal static string GameStoppedTitle {
+            get {
+                return ResourceManager.GetString("GameStoppedTitle", resourceCulture);
             }
         }
     }

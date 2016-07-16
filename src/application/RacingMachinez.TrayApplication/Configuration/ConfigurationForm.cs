@@ -1,5 +1,6 @@
 ﻿using RacingMachinez.TrayApplication.Configuration.Interfaces;
 using System.Windows.Forms;
+using RacingMachinez.TrayApplication.Framework;
 
 namespace RacingMachinez.TrayApplication.Configuration
 {

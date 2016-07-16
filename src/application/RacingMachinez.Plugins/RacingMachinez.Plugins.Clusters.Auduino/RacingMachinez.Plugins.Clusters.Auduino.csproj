@@ -45,7 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuduinoPlugin.cs" />
+    <Compile Include="AuduinoCluster.cs" />
+    <Compile Include="AuduinoClusterFactoryPlugin.cs" />
     <Compile Include="GameDataQueryBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Writer.cs" />

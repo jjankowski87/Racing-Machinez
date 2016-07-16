@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RacingMachinez.TestConsole", "RacingMachinez.TestConsole\RacingMachinez.TestConsole.csproj", "{260DE160-8735-405E-82C6-0B8A31DE4A6B}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RacingMachinez.Core.Interfaces", "RacingMachinez.Core.Interfaces\RacingMachinez.Core.Interfaces.csproj", "{6EAF9128-8F9F-4297-BCC4-E1A946B488C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RacingMachinez.TrayApplication", "RacingMachinez.TrayApplication\RacingMachinez.TrayApplication.csproj", "{87377F9D-B419-44E8-9E3A-87E56CA1FA76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RacingMachinez.Plugins.Clusters.Auduino", "RacingMachinez.Plugins\RacingMachinez.Plugins.Clusters.Auduino\RacingMachinez.Plugins.Clusters.Auduino.csproj", "{F3C63E8A-175A-4FDA-AD68-AA52FF3DAFBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{87377F9D-B419-44E8-9E3A-87E56CA1FA76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87377F9D-B419-44E8-9E3A-87E56CA1FA76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87377F9D-B419-44E8-9E3A-87E56CA1FA76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3C63E8A-175A-4FDA-AD68-AA52FF3DAFBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3C63E8A-175A-4FDA-AD68-AA52FF3DAFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3C63E8A-175A-4FDA-AD68-AA52FF3DAFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3C63E8A-175A-4FDA-AD68-AA52FF3DAFBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
