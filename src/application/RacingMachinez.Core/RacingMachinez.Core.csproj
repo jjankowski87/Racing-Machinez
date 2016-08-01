@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -45,12 +49,9 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ApplicationManager.cs" />
-    <Compile Include="DataStore\Configuration.cs" />
-    <Compile Include="DataStore\ConfigurationParser.cs" />
     <Compile Include="DataStore\ConfigurationRepository.cs" />
     <Compile Include="DeviceManager.cs" />
-    <Compile Include="IActivePluginSelector.cs" />
-    <Compile Include="IUserNotifier.cs" />
+    <Compile Include="GameManager.cs" />
     <Compile Include="PluginsManager.cs" />
     <Compile Include="Logging\DefaultLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,6 +70,9 @@
       <Project>{f3c63e8a-175a-4fda-ad68-aa52ff3dafbf}</Project>
       <Name>RacingMachinez.Plugins.Clusters.Auduino</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

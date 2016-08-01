@@ -1,13 +1,17 @@
-﻿namespace RacingMachinez.Core.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace RacingMachinez.Core.Interfaces
 {
     public interface IApplicationManager
     {
-        void DeviceConnected();
+        Task DeviceConnectedAsync();
 
         void DeviceDisconnected();
 
         void PerformClusterCalibration(short speed, short revs);
 
-        void PerformGameOperations();
+        Task PerformGameOperationsAsync();
+
+        Task ReloadApplicationAsync();
     }
 }

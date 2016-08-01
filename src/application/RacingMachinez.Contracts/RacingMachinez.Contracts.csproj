@@ -45,6 +45,7 @@
     </Compile>
     <Compile Include="ClusterConfiguration.cs" />
     <Compile Include="ClusterState.cs" />
+    <Compile Include="DataStore\Configuration.cs" />
     <Compile Include="GameData.cs" />
     <Compile Include="GameDataChangedEventArgs.cs" />
     <Compile Include="GameStateChangedEventArgs.cs" />

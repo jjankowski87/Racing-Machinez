@@ -1,4 +1,4 @@
-﻿namespace RacingMachinez.Core
+﻿namespace RacingMachinez.Core.Interfaces
 {
     public interface IUserNotifier
     {

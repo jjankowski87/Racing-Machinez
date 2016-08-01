@@ -1,5 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using RacingMachinez.Contracts.DataStore;
 using RacingMachinez.Core.Interfaces.DataStore;
 
 namespace RacingMachinez.Core.DataStore
@@ -8,39 +10,48 @@ namespace RacingMachinez.Core.DataStore
     {
         private const string ConfigurationFileName = "config.ini";
 
-        public void EnableGamePlugin(Guid gamePluginId)
-        {
+        private Configuration _configuration;
 
+        public async Task<Configuration> LoadConfigurationAsync()
+        {
+            try
+            {
+                if (_configuration == null)
+                {
+                    string fileContent;
+                    using (var streamReader = File.OpenText(ConfigurationFileName))
+                    {
+                        fileContent = await streamReader.ReadToEndAsync();
+                    }
+
+                    _configuration = JsonConvert.DeserializeObject<Configuration>(fileContent);
+                }
+
+                return _configuration;
+            }
+            catch
+            {
+                return Configuration.Default();
+            }
         }
 
-        public void DisableGamePlugin(Guid gamePluginId)
+        public async Task<bool> SaveConfigurationAsync(Configuration configuration)
         {
+            try
+            {
+                var configurationJson = JsonConvert.SerializeObject(configuration);
+                using (var streamWriter = new StreamWriter(ConfigurationFileName))
+                {
+                    await streamWriter.WriteAsync(configurationJson);
+                }
 
-        }
-
-        public IList<Guid> GetActiveGamePluginIds()
-        {
-            return new List<Guid>();
-        }
-
-        public string GetClusterPort()
-        {
-            return "COM3";
-        }
-
-        public void SetClusterPort()
-        {
-            
-        }
-
-        public Guid GetActiveClusterPlugin()
-        {
-            return Guid.Empty;
-        }
-
-        public void SetActiveClusterPlugin(Guid clusterPluginId)
-        {
-
+                _configuration = configuration;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

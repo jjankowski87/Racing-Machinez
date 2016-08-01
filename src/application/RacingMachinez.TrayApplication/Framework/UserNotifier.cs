@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using RacingMachinez.Core;
+using RacingMachinez.Core.Interfaces;
 using RacingMachinez.TrayApplication.Configuration.Interfaces;
 using RacingMachinez.TrayApplication.Resources;
 

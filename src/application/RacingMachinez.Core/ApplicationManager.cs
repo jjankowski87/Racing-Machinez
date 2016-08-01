@@ -1,38 +1,34 @@
-﻿using System.Collections.Generic;
-using RacingMachinez.Contracts.Plugins;
+﻿using System.Threading.Tasks;
 using RacingMachinez.Core.Interfaces;
 
 namespace RacingMachinez.Core
 {
     public class ApplicationManager : IApplicationManager
     {
-        // TODO: configurable (maybe form)
-        private const string PluginsPath = "Plugins";
+        private readonly IGamesManager _gamesManager;
 
-        private readonly IPluginsManager<IGamePlugin> _gamePluginManager;
+        private readonly IDeviceManager _deviceManager;
 
-        private IList<IGamePlugin> _gamePlugins = new List<IGamePlugin>();
-
-        private DeviceManager _deviceManager;
-
-        public ApplicationManager(IPluginsManager<IGamePlugin> gamePluginManager, IPluginsManager<IClusterFactoryPlugin> clusterFactoryPluginManager, IUserNotifier userNotifier)
+        public ApplicationManager(IGamesManager gamesManager, IDeviceManager deviceManager)
         {
-            _deviceManager = new DeviceManager(clusterFactoryPluginManager, userNotifier);
-
-            _gamePluginManager = gamePluginManager;
-
-            _gamePlugins = _gamePluginManager.ReloadPlugins(PluginsPath);
-            DeviceConnected();
+            _gamesManager = gamesManager;
+            _deviceManager = deviceManager;
         }
 
-        public void DeviceConnected()
+        public async Task ReloadApplicationAsync()
+        {
+            await _gamesManager.ReloadGamesAsync();
+            await _deviceManager.ReloadClustersAsync();
+        }
+
+        public async Task DeviceConnectedAsync()
         {
             if (_deviceManager.IsClusterConnected)
             {
                 return;
             }
 
-            _deviceManager.TryToConnectCluster();
+            await _deviceManager.TryToConnectClusterAsync();
         }
 
         public void DeviceDisconnected()
@@ -54,16 +50,16 @@ namespace RacingMachinez.Core
             //}
         }
 
-        public void PerformGameOperations()
+        public async Task PerformGameOperationsAsync()
         {
-            //if (_cluster?.IsConnected == true)
-            //{
-            //    foreach (var game in _gamePlugins.Where(g => g.IsRunning()))
-            //    {
-            //        _cluster.UpdateGameData(game.GetGameData());
-            //        return;
-            //    }
-            //}
+            if (_deviceManager.IsClusterConnected)
+            {
+                var gamePlugin = await _gamesManager.GetActiveGamePluginAsync();
+                if (gamePlugin != null)
+                {
+                    _deviceManager.SendDataToCluster(gamePlugin.GetGameData());
+                }
+            }
         }
     }
 }

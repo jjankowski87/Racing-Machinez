@@ -39,7 +39,7 @@ namespace RacingMachinez.TrayApplication.Framework
                         _applicationManager.DeviceDisconnected();
                         break;
                     case UsbNotification.UsbDeviceConnected:
-                        _applicationManager.DeviceConnected();
+                        _applicationManager.DeviceConnectedAsync();
                         break;
                 }
             }

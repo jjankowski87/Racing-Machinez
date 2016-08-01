@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Threading.Tasks;
+using RacingMachinez.Contracts.DataStore;
 
 namespace RacingMachinez.Core.Interfaces.DataStore
 {
     public interface IConfigurationRepository
     {
-        IList<Guid> GetActiveGamePluginIds();
+        Task<Configuration> LoadConfigurationAsync();
 
-        void DisableGamePlugin(Guid gamePluginId);
-
-        void EnableGamePlugin(Guid gamePluginId);
-
-        Guid GetActiveClusterPlugin();
-
-        void SetActiveClusterPlugin(Guid clusterPluginId);
-
-        string GetClusterPort();
-
-        void SetClusterPort();
+        Task<bool> SaveConfigurationAsync(Configuration configuration);
     }
 }

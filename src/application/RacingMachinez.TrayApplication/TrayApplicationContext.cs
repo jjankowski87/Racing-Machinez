@@ -16,7 +16,9 @@ namespace RacingMachinez.TrayApplication
 
         private readonly IApplicationManager _applicationManager;
 
-        private IFormManager _formManager;
+        private readonly IFormManager _formManager;
+
+        private bool _isInitialized = false;
 
         public TrayApplicationContext(IFormManager formManager, IApplicationManager applicationManager)
         {
@@ -27,8 +29,8 @@ namespace RacingMachinez.TrayApplication
                     Icon = Resources.Graphics.Tachometer,
                     ContextMenu = new ContextMenu(new[]
                         {
-                            new MenuItem(Resources.Strings.Configuration, new EventHandler(OnConfigurationClicked)),
-                            new MenuItem(Resources.Strings.Exit, new EventHandler(OnExitClicked))
+                            new MenuItem(Resources.Strings.Configuration, OnConfigurationClicked),
+                            new MenuItem(Resources.Strings.Exit, OnExitClicked)
                         }),
                     Visible = true,
                 };
@@ -40,9 +42,16 @@ namespace RacingMachinez.TrayApplication
             _notificationWindow = new UsbNotificationNativeForm(applicationManager);
         }
 
-        private void OnApplicationTimerTicked(object sender, EventArgs e)
+        private async void OnApplicationTimerTicked(object sender, EventArgs e)
         {
-            _applicationManager.PerformGameOperations();
+            if (!_isInitialized)
+            {
+                await _applicationManager.ReloadApplicationAsync();
+                _isInitialized = true;
+                return;
+            }
+
+            await _applicationManager.PerformGameOperationsAsync();
         }
 
         private void OnExitClicked(object sender, EventArgs e)

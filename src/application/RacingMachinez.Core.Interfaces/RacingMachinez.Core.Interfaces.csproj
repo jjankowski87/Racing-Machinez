@@ -45,7 +45,10 @@
     </Compile>
     <Compile Include="DataStore\IConfigurationRepository.cs" />
     <Compile Include="IApplicationManager.cs" />
+    <Compile Include="IDeviceManager.cs" />
+    <Compile Include="IGamesManager.cs" />
     <Compile Include="IPluginsManager.cs" />
+    <Compile Include="IUserNotifier.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
