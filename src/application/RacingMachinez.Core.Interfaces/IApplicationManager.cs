@@ -10,7 +10,7 @@ namespace RacingMachinez.Core.Interfaces
 
         void PerformClusterCalibration(short speed, short revs);
 
-        Task PerformGameOperationsAsync();
+        Task PerformOperationsAsync();
 
         Task ReloadApplicationAsync();
     }

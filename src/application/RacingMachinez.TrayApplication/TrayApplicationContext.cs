@@ -51,7 +51,7 @@ namespace RacingMachinez.TrayApplication
                 return;
             }
 
-            await _applicationManager.PerformGameOperationsAsync();
+            await _applicationManager.PerformOperationsAsync();
         }
 
         private void OnExitClicked(object sender, EventArgs e)

@@ -28,6 +28,26 @@ namespace RacingMachinez.Core
 
         public bool IsClusterConnected => _cluster?.IsConnected == true;
 
+        public ClusterState State
+        {
+            get
+            {
+                if (IsClusterConnected)
+                {
+                    return _cluster.GetClusterState();
+                }
+
+                return ClusterState.Unknown;
+            }
+            set
+            {
+                if (IsClusterConnected)
+                {
+                    _cluster.SetClusterState(value);
+                }
+            }
+        }
+
         public async Task ReloadClustersAsync()
         {
             await CreateClusterAsync();

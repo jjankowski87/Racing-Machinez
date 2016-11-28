@@ -105,6 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="config.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +133,14 @@
     <ProjectReference Include="..\RacingMachinez.Core\RacingMachinez.Core.csproj">
       <Project>{38254d1f-9d06-4ac0-b697-74cf55507e0c}</Project>
       <Name>RacingMachinez.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.Clusters.Auduino\RacingMachinez.Plugins.Clusters.Auduino.csproj">
+      <Project>{f3c63e8a-175a-4fda-ad68-aa52ff3dafbf}</Project>
+      <Name>RacingMachinez.Plugins.Clusters.Auduino</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RacingMachinez.Plugins\RacingMachinez.Plugins.Games.ProjectCars\RacingMachinez.Plugins.Games.ProjectCars.csproj">
+      <Project>{4656bb24-4521-46d2-a238-935b04f860d8}</Project>
+      <Name>RacingMachinez.Plugins.Games.ProjectCars</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

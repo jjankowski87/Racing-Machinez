@@ -50,16 +50,18 @@ namespace RacingMachinez.Core
             //}
         }
 
-        public async Task PerformGameOperationsAsync()
+        public async Task PerformOperationsAsync()
         {
-            if (_deviceManager.IsClusterConnected)
+            if (!_deviceManager.IsClusterConnected)
             {
-                var gamePlugin = await _gamesManager.GetActiveGamePluginAsync();
+                return;
+            }
+
+            var gamePlugin = await _gamesManager.GetActiveGamePluginAsync();
                 if (gamePlugin != null)
                 {
                     _deviceManager.SendDataToCluster(gamePlugin.GetGameData());
                 }
-            }
         }
     }
 }

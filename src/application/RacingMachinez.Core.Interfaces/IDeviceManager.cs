@@ -7,6 +7,8 @@ namespace RacingMachinez.Core.Interfaces
     {
         bool IsClusterConnected { get; }
 
+        ClusterState State { get; set; }
+
         Task ReloadClustersAsync();
 
         Task TryToConnectClusterAsync();
