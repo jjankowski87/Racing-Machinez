@@ -1,0 +1,1 @@
+Racing-Machinez is a project that allows you to connect car cluster to computer. It allows to display speed, revs and current gear. For more details look at wiki page: https://github.com/jjankowski87/Racing-Machinez/wiki
